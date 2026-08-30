@@ -1,0 +1,21 @@
+# Virtual Environment
+venv/
+.env
+
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Data & Models (ignore contents, keep directory structure via .gitkeep)
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+models/*
+!models/.gitkeep
+
+# VS Code directory
+.vscode/
