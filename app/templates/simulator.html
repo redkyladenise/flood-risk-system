@@ -3,6 +3,121 @@
 {% block title %}Simulator | Flood Risk Assessment System{% endblock %}
 
 {% block content %}
-<h1>Simulator</h1>
-<p class="text-muted">What-If Simulator with sliders and prediction results will appear here.</p>
+<h1>What-If Simulator</h1>
+<p class="text-muted">
+    Adjust the conditions below to see how the model predicts flood risk. This is fully self-contained and does not require live data.
+</p>
+
+<div class="row mt-4">
+    <!-- Input Panel -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Input Conditions</h5>
+            </div>
+            <div class="card-body">
+
+                <!-- City Selector -->
+                <div class="mb-4">
+                    <label for="citySelect" class="form-label fw-bold">City</label>
+                    <select id="citySelect" class="form-select">
+                        <option value="Manila">Manila</option>
+                        <option value="Marikina">Marikina</option>
+                        <option value="Pasig">Pasig</option>
+                        <option value="Quezon City">Quezon City</option>
+                    </select>
+                </div>
+
+                <!-- Rainfall Slider + Numeric Input -->
+                <div class="mb-4">
+                    <label for="rainfallSlider" class="form-label fw-bold">Rainfall (mm)</label>
+                    <div class="d-flex align-items-center gap-3">
+                        <input type="range" class="form-range flex-grow-1" id="rainfallSlider"
+                               min="0" max="60" step="0.5" value="25">
+                        <input type="number" class="form-control" id="rainfallInput"
+                               min="0" max="60" step="0.5" value="25"
+                               style="width: 90px;">
+                    </div>
+                    <small class="text-muted">Range: 0–60 mm (training data max ≈ 53 mm)</small>
+                </div>
+
+                <!-- River Level Slider + Numeric Input -->
+                <div class="mb-4">
+                    <label for="riverSlider" class="form-label fw-bold">River Water Level (m)</label>
+                    <div class="d-flex align-items-center gap-3">
+                        <input type="range" class="form-range flex-grow-1" id="riverSlider"
+                               min="0" max="8" step="0.1" value="2.5">
+                        <input type="number" class="form-control" id="riverInput"
+                               min="0" max="8" step="0.1" value="2.5"
+                               style="width: 90px;">
+                    </div>
+                    <small class="text-muted">Dataset-scale — not real-world meters</small>
+                </div>
+
+                <!-- Soil Moisture Slider + Numeric Input -->
+                <div class="mb-4">
+                    <label for="soilSlider" class="form-label fw-bold">Soil Moisture (%)</label>
+                    <div class="d-flex align-items-center gap-3">
+                        <input type="range" class="form-range flex-grow-1" id="soilSlider"
+                               min="0" max="70" step="1" value="35">
+                        <input type="number" class="form-control" id="soilInput"
+                               min="0" max="70" step="1" value="35"
+                               style="width: 90px;">
+                    </div>
+                    <small class="text-muted">Range: 0–70%</small>
+                </div>
+
+                <!-- Simulate Button -->
+                <button id="simulateBtn" class="btn btn-primary w-100 py-2">
+                    Simulate
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Panel -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Prediction Results</h5>
+            </div>
+            <div class="card-body">
+                <div id="resultsPlaceholder" class="text-muted">
+                    <p class="mb-0">Adjust sliders and click <strong>Simulate</strong> to see predictions.</p>
+                </div>
+
+                <div id="resultsContent" style="display: none;">
+                    <div class="row text-center mb-3">
+                        <div class="col-6">
+                            <div class="p-3 border rounded">
+                                <h6 class="text-muted">Risk Level</h6>
+                                <h3 id="riskLevelResult" class="mb-0">—</h3>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 border rounded">
+                                <h6 class="text-muted">Confidence</h6>
+                                <h3 id="confidenceResult" class="mb-0">—</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-3 border rounded mb-3">
+                        <h6 class="text-muted">Estimated Flood Depth</h6>
+                        <h4 id="depthResult" class="mb-0">—</h4>
+                    </div>
+
+                    <div class="p-3 border rounded">
+                        <h6 class="text-muted">Probability Breakdown</h6>
+                        <div id="probabilityBreakdown"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/simulator.js') }}"></script>
 {% endblock %}

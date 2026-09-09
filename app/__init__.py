@@ -5,6 +5,9 @@ def create_app():
     app = Flask(__name__)
     app.config["SECRET_KEY"] = "oquwn788cabxma124s5a78kaunas24562ajysa"
 
+    from app import model_loader
+    model_loader.load_models()
+    
     from app import routes
     app.register_blueprint(routes.bp)
 
