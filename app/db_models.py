@@ -28,15 +28,7 @@ class WeatherRecord(db.Model):
     risk_level = db.Column(db.Text)  # classification target (Low/Moderate/High)
     data_source = db.Column(db.Text, default="Kaggle")  # "Kaggle" or "PAGASA"
 
-
-class RiverLevelMonthlyAverage(db.Model):
-    __tablename__ = "river_level_monthly_averages"
-
-    avg_id = db.Column(db.Integer, primary_key=True)
-    city_id = db.Column(db.Integer, db.ForeignKey("cities.city_id"), nullable=False)
-    month = db.Column(db.Integer, nullable=False)  # 1–12
-    avg_river_level = db.Column(db.Float)
-
+    city = db.relationship("City", backref="weather_records")
 # --- skipped ---
 # class FloodEvent(db.Model):
 #     __tablename__ = "flood_events"
@@ -48,6 +40,16 @@ class RiverLevelMonthlyAverage(db.Model):
 #     reported_depth_description = db.Column(db.Text)
 #     source_citation = db.Column(db.Text)
 
+class MonthlyAverage(db.Model):
+    __tablename__ = "monthly_averages"
+
+    avg_id = db.Column(db.Integer, primary_key=True)
+    city_id = db.Column(db.Integer, db.ForeignKey("cities.city_id"), nullable=False)
+    month = db.Column(db.Integer, nullable=False)  # 1–12
+    avg_river_level = db.Column(db.Float)
+    avg_soil_moisture = db.Column(db.Float)
+
+    city = db.relationship("City", backref="monthly_averages")
 
 class EvacuationCenter(db.Model):
     __tablename__ = "evacuation_centers"
@@ -60,6 +62,8 @@ class EvacuationCenter(db.Model):
     address = db.Column(db.Text)
     capacity = db.Column(db.Integer)
 
+    city = db.relationship("City", backref="evacuation_centers")
+
 
 class Hotline(db.Model):
     __tablename__ = "hotlines"
@@ -70,6 +74,8 @@ class Hotline(db.Model):
     category = db.Column(db.Text)   
     service = db.Column(db.Text)  
     number = db.Column(db.Text, nullable=False)
+
+    city = db.relationship("City", backref="hotlines")
 
 # --- skipped ---
 # class RiverStation(db.Model):
@@ -95,6 +101,8 @@ class Hotspot(db.Model):
     description = db.Column(db.Text)
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
+
+    city = db.relationship("City", backref="hotspots") 
 
 # --- skipped ---
 # class ModelMetric(db.Model):

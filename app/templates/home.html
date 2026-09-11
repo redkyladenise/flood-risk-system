@@ -3,6 +3,153 @@
 {% block title %}Home | Flood Risk Assessment System{% endblock %}
 
 {% block content %}
-<h1>Home</h1>
-<p class="text-muted">Assessment board, alert banner, interactive map, and forecast summary will appear here.</p>
+
+<!-- Alert Banner (hidden by default) -->
+<div id="alertBanner" class="alert alert-danger alert-dismissible fade show d-none" role="alert">
+    <strong>⚠ High Flood Risk Alert:</strong>
+    <span id="alertBannerText">A city is currently at High risk.</span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="mt-1">
+        <small class="text-muted" id="alertBannerTimestamp"></small>
+    </div>
+</div>
+
+<h1>Flood Risk Assessment</h1>
+<p class="text-muted">
+    Live risk assessment for Manila, Marikina, Pasig, and Quezon City.
+    Predictions are based on the CART model trained on historical weather and flood data.
+</p>
+
+<div class="row mt-4 g-3">
+    <!-- LEFT: Interactive Map -->
+    <div class="col-lg-7 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Risk Map</h5>
+                <small class="text-white-50">Hover over a city for details</small>
+            </div>
+            <div class="card-body p-0 position-relative">
+                <div id="homeMap" style="height: 500px; width: 100%;"></div>
+
+                <div class="position-absolute bottom-0 start-0 m-3 p-2 bg-white border rounded small" style="z-index: 1000;">
+                    <strong>Legend</strong>
+                    <div><span style="display:inline-block;width:12px;height:12px;background:#198754;margin-right:4px;"></span>Low Risk</div>
+                    <div><span style="display:inline-block;width:12px;height:12px;background:#ffc107;margin-right:4px;"></span>Moderate Risk</div>
+                    <div><span style="display:inline-block;width:12px;height:12px;background:#dc3545;margin-right:4px;"></span>High Risk</div>
+                    <div class="mt-1"><span style="display:inline-block;width:12px;height:12px;background:#fd7e14;border-radius:50%;margin-right:4px;"></span>Flood Hotspot</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT: Assessment Board -->
+    <div class="col-lg-5 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Today's Assessment</h5>
+            </div>
+            <div class="card-body">
+
+                <!-- City dropdown -->
+                <div class="mb-3 d-flex align-items-center gap-2">
+                    <label for="homeCitySelect" class="form-label fw-bold mb-0 text-nowrap">Select City:</label>
+                    <select id="homeCitySelect" class="form-select">
+                        {% for city in cities %}
+                        <option value="{{ city.name }}">{{ city.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Loading indicator -->
+                <div id="assessmentLoading" class="text-muted">
+                    <em>Loading current assessment…</em>
+                </div>
+
+                <!-- Assessment results (hidden until data arrives) -->
+                <div id="assessmentContent" style="display: none;">
+
+                    <!-- Risk level big display -->
+                    <div class="text-center mb-3 p-3 border rounded" id="riskBox">
+                        <h2 id="homeRiskLevel" class="mb-0">—</h2>
+                        <h6 class="text-muted mb-1">Current Risk Level</h6>
+                        <small class="text-muted">
+                            Confidence: <span id="homeConfidence">—</span>
+                        </small>
+                    </div>
+
+                    <!-- Details grid -->
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <div class="p-2 border rounded">
+                                <small class="text-muted">Est. Flood Depth</small>
+                                <div id="homeDepth" class="fw-bold">—</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-2 border rounded">
+                                <small class="text-muted">Rainfall Today</small>
+                                <div id="homeRainfall" class="fw-bold">—</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-2 border rounded">
+                                <small class="text-muted">River Level (proxy)</small>
+                                <div id="homeRiverLevel" class="fw-bold">—</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-2 border rounded">
+                                <small class="text-muted">Soil Moisture (proxy)</small>
+                                <div id="homeSoilMoisture" class="fw-bold">—</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Advisory text -->
+                    <div class="alert alert-light border mb-0">
+                        <small><strong>Advisory:</strong> <span id="homeAdvisory">—</span></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Forecast Summary Row -->
+<div class="row mt-2">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Forecast Summary</h5>
+            </div>
+            <div class="card-body">
+
+                <div id="forecastLoading" class="text-muted">
+                    <em>Loading forecast…</em>
+                </div>
+
+                <div id="forecastContent" style="display: none;">
+                    <div class="mb-3">
+                        <strong>Trend:</strong>
+                        <span id="forecastTrend" class="badge bg-secondary">—</span>
+                    </div>
+
+                    <div class="row g-3" id="forecastCards">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    window.APP_CITIES = {{ cities | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/home.js') }}"></script>
 {% endblock %}
