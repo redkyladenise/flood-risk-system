@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from flask import Blueprint, render_template, request, jsonify
 from app import model_loader
 
@@ -42,12 +43,12 @@ def api_simulate():
     # soil_moisture = float(data.get("soil_moisture", 0))
     # city = data.get("city", "Manila")
 
-    # ------Future notes: verify max values
+    # =====Future NOTE: verify max values====
     try:
         rainfall = float(data.get("rainfall", 0))
     except (TypeError, ValueError):
         rainfall = 0.0
-    rainfall = max(0.0, min(60.0, rainfall))
+    rainfall = max(0.0, min(100.0, rainfall))
 
     try:
         river_level = float(data.get("river_level", 0))
@@ -59,17 +60,11 @@ def api_simulate():
         soil_moisture = float(data.get("soil_moisture", 0))
     except (TypeError, ValueError):
         soil_moisture = 0.0
-    soil_moisture = max(0.0, min(70.0, soil_moisture))
+    soil_moisture = max(0.0, min(100.0, soil_moisture))
 
     city = data.get("city", "Manila")
     if city not in ["Manila", "Marikina", "Pasig", "Quezon City"]:
         city = "Manila"
-
-    # Build the feature vector in the exact order the models expect
-    # Feature order: WaterLevel_m, SoilMoisture_pct, Elevation_m,
-    #                Location_Manila, Location_Marikina, Location_Pasig,
-    #                Location_Quezon City, Rainfall_mm
-    # (Rainfall is last since it was added after the others in cart_features)
 
     city_dummies = {
         "Manila": [1, 0, 0, 0],
@@ -89,6 +84,7 @@ def api_simulate():
     dummies = city_dummies.get(city, [1, 0, 0, 0])
 
     features = [
+        rainfall,
         river_level,     
         soil_moisture,
         elevation,
@@ -96,11 +92,12 @@ def api_simulate():
         dummies[1],
         dummies[2],
         dummies[3],
-        # ================================= 
-        # PHASE 2 (future): add Rainfall_mm 
     ]
 
-    X = np.array([features])
+    X = pd.DataFrame([features], columns=[
+        "Rainfall_mm", "WaterLevel_m", "SoilMoisture_pct", "Elevation_m",
+        "Location_Manila", "Location_Marikina", "Location_Pasig", "Location_Quezon City"
+    ])
 
     # run predictions
     predicted_depth = float(model_loader.regressor.predict(X)[0])

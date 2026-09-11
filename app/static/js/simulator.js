@@ -1,4 +1,4 @@
-// Wait for the page to fully load before running any code
+// wait for the page to fully load before running any code
 document.addEventListener("DOMContentLoaded", function () {
 
     // Get references to all the elements we need
@@ -10,18 +10,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const riverInput = document.getElementById("riverInput");
     const soilInput = document.getElementById("soilInput");
     const simulateBtn = document.getElementById("simulateBtn");
-    const resultsPlaceholder = document.getElementById("resultsPlaceholder");
-    const resultsContent = document.getElementById("resultsContent");
+
+    const resultsPanel = document.getElementById("resultsPanel");
+    const simulatorRow = document.getElementById("simulatorRow");
     const riskLevelResult = document.getElementById("riskLevelResult");
     const confidenceResult = document.getElementById("confidenceResult");
     const depthResult = document.getElementById("depthResult");
     const probabilityBreakdown = document.getElementById("probabilityBreakdown");
 
-    // ============================================================
-    // Sync sliders and numeric inputs (both directions)
-    // ============================================================
+    // -- sync sliders and numeric inputs (both directions) ---
 
-    // Rainfall: slider -> input, and input -> slider
     rainfallSlider.addEventListener("input", function () {
         rainfallInput.value = rainfallSlider.value;
     });
@@ -30,11 +28,18 @@ document.addEventListener("DOMContentLoaded", function () {
         let val = parseFloat(rainfallInput.value);
         if (isNaN(val)) val = 0;
         if (val < 0) val = 0;
-        if (val > 60) val = 60;
+        if (val > 100) val = 100;
         rainfallSlider.value = val;
     });
 
-    // River Level: slider -> input, and input -> slider
+    rainfallInput.addEventListener("blur", function () {
+        let val = parseFloat(rainfallInput.value);
+        if (isNaN(val) || val < 0) val = 0;
+        if (val > 60) val = 60;
+        rainfallInput.value = val;
+        rainfallSlider.value = val;
+    });
+
     riverSlider.addEventListener("input", function () {
         riverInput.value = riverSlider.value;
     });
@@ -47,7 +52,14 @@ document.addEventListener("DOMContentLoaded", function () {
         riverSlider.value = val;
     });
 
-    // Soil Moisture: slider -> input, and input -> slider
+    riverInput.addEventListener("blur", function () {
+        let val = parseFloat(riverInput.value);
+        if (isNaN(val) || val < 0) val = 0;
+        if (val > 8) val = 8;
+        riverInput.value = val;
+        riverSlider.value = val;
+    });
+
     soilSlider.addEventListener("input", function () {
         soilInput.value = soilSlider.value;
     });
@@ -56,14 +68,20 @@ document.addEventListener("DOMContentLoaded", function () {
         let val = parseFloat(soilInput.value);
         if (isNaN(val)) val = 0;
         if (val < 0) val = 0;
-        if (val > 70) val = 70;
+        if (val > 100) val = 100;
         soilSlider.value = val;
     });
 
-    // Simulate button click handler
-    simulateBtn.addEventListener("click", async function () {
+    soilInput.addEventListener("blur", function () {
+        let val = parseFloat(soilInput.value);
+        if (isNaN(val) || val < 0) val = 0;
+        if (val > 100) val = 100;
+        soilInput.value = val;
+        soilSlider.value = val;
+    });
 
-        // Gather current values
+    // -- simulate button click handler ---
+    simulateBtn.addEventListener("click", async function () {
         const payload = {
             rainfall: parseFloat(rainfallInput.value),
             river_level: parseFloat(riverInput.value),
@@ -71,12 +89,10 @@ document.addEventListener("DOMContentLoaded", function () {
             city: citySelect.value
         };
 
-        // Disable button and show loading state
         simulateBtn.disabled = true;
         simulateBtn.textContent = "Running...";
 
         try {
-            // Send request to the API
             const response = await fetch("/api/simulate", {
                 method: "POST",
                 headers: {
@@ -91,12 +107,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const data = await response.json();
 
-            // Update results
+            // update results
             riskLevelResult.textContent = data.risk_level;
             confidenceResult.textContent = data.confidence_pct + "%";
             depthResult.textContent = data.estimated_depth_m + " m";
 
-            // Build probability breakdown
             probabilityBreakdown.innerHTML = "";
             const sortedProbs = Object.entries(data.probabilities).sort((a, b) => b[1] - a[1]);
 
@@ -110,14 +125,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 probabilityBreakdown.appendChild(row);
             });
 
-            // Show results, hide placeholder
-            resultsPlaceholder.style.display = "none";
-            resultsContent.style.display = "block";
+            // show results
+            resultsPanel.style.display = "block";
+            simulatorRow.classList.remove("justify-content-center");
+            
 
         } catch (error) {
             alert("Error running simulation: " + error.message);
         } finally {
-            // Re-enable button
+            // re-enable button
             simulateBtn.disabled = false;
             simulateBtn.textContent = "Simulate";
         }
