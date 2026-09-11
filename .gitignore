@@ -19,3 +19,6 @@ models/*
 
 # VS Code directory
 .vscode/
+# Database
+instance/
+*.db
