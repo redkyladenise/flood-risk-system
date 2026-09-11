@@ -1,0 +1,26 @@
+City,Agency,Category,Service,Number
+National,PAGASA,Weather,Weather / Typhoon Advisory,1555
+National,NDRRMC,Emergency,National Emergency,911
+National,NDRRMC Operations Center,Disaster Response,Disaster Operations Center,(02) 8911-1406
+National,Philippine Red Cross,Rescue,Emergency / Rescue,143
+National,DPWH,Flood Control,Flood Control,(02) 8304-3000
+Metro Manila,MMDA,Flood,Flood / Traffic Emergency,136
+Manila,LGU,Emergency,Emergency,(02) 8568-6909
+Manila,LGU,Emergency,Emergency,0932-662-2322
+Manila,LGU,Emergency,Emergency,0950-700-3710
+Marikina,Marikina Rescue Unit,Rescue,Flood Rescue,(02) 8646-2534
+Marikina,LGU,Rescue,Rescue,161
+Marikina,LGU,Rescue,Rescue,0917-584-2168
+Marikina,LGU,Emergency,Emergency,(02) 8646-0427
+Marikina,LGU,Emergency,Emergency,(02) 7116-5532
+Marikina,LGU,Emergency,Emergency,0917-584-2168
+Marikina,LGU,Emergency,Emergency,0928-559-3341
+Marikina,LGU,Emergency,Emergency,0998-997-0115
+Marikina,LGU,Emergency,Emergency,0998-579-6435
+Pasig,LGU,Disaster Response,DRRMO Emergency,8643-0000
+Quezon City,LGU,Emergency,Helpline,122
+Quezon City,LGU,Emergency,Emergency,(02) 8988-4242 local 7245
+Quezon City,LGU,Emergency,Emergency,0977-031-2892
+Quezon City,LGU,Emergency,Emergency,0947-885-9929
+Quezon City,LGU,Medical,Emergency / Medical Services / Urban Search and Rescue,0947-884-7498
+Quezon City,LGU,Medical,Emergency / Medical Services / Urban Search and Rescue,(02) 8928-4396
