@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Live Weather | Flood Risk Assessment System{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+    <div>
+        <h1 class="mb-1">Live Weather</h1>
+        <p class="text-muted mb-0">
+            Current conditions and 7-day outlook from
+            <a href="https://open-meteo.com" target="_blank">Open-Meteo</a>.
+            Data refreshes on each page load.
+        </p>
+    </div>
+    <div class="text-end">
+        <label for="weatherCitySelect" class="form-label fw-bold mb-1">Select City:</label>
+        <select id="weatherCitySelect" class="form-select">
+            {% for city in cities %}
+            <option value="{{ city.name }}">{{ city.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+<!-- Loading indicator -->
+<div id="weatherLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="text-muted mt-2 mb-0">Loading weather data…</p>
+</div>
+
+<!-- Error state -->
+<div id="weatherError" class="alert alert-warning d-none" role="alert">
+    Weather data unavailable. Please try again later.
+</div>
+
+<div id="weatherContent" style="display: none;">
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Current Conditions — <span id="weatherCityLabel">—</span></h5>
+            <small id="weatherLastUpdated" class="text-white-50"></small>
+        </div>
+        <div class="card-body">
+            <div class="row align-items-center">
+                <!-- Hero: icon + temp -->
+                <div class="col-md-5 text-center mb-3 mb-md-0">
+                    <div id="weatherIcon" style="font-size: 5rem; line-height: 1;">⛅</div>
+                    <h2 id="weatherTemp" class="mb-1">—</h2>
+                    <p id="weatherLabel" class="text-muted mb-1">—</p>
+                    <small class="text-muted">Feels like <span id="weatherFeelsLike">—</span></small>
+                </div>
+
+                <!-- Metric cards -->
+                <div class="col-md-7">
+                    <div class="row g-3">
+                        <div class="col-6 col-md-6">
+                            <div class="p-3 border rounded h-100">
+                                <small class="text-muted d-block">Rain (current)</small>
+                                <div id="weatherRain" class="fw-bold">—</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-6">
+                            <div class="p-3 border rounded h-100">
+                                <small class="text-muted d-block">Humidity</small>
+                                <div id="weatherHumidity" class="fw-bold">—</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-6">
+                            <div class="p-3 border rounded h-100">
+                                <small class="text-muted d-block">Wind</small>
+                                <div id="weatherWind" class="fw-bold">—</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-6">
+                            <div class="p-3 border rounded h-100">
+                                <small class="text-muted d-block">Pressure</small>
+                                <div id="weatherPressure" class="fw-bold">—</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0">7-Day Forecast</h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-3" id="forecastRow">
+                <!-- JS -->
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    window.LIVE_WEATHER_CITIES = {{ cities | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/live_weather.js') }}"></script>
+{% endblock %}
