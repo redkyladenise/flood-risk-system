@@ -10,9 +10,6 @@
     National hotlines apply everywhere. Evacuation centers and local hotlines are shown per city.
 </p>
 
-<!-- ============================================================ -->
-<!-- NATIONAL SECTION -->
-<!-- ============================================================ -->
 <div class="d-flex align-items-center mt-4 mb-3">
     <h3 class="mb-0 text-danger">Nationwide</h3>
     <hr class="flex-grow-1 ms-3 my-0">
@@ -48,15 +45,11 @@
     </div>
 </div>
 
-<!-- ============================================================ -->
-<!-- LOCAL SECTION -->
-<!-- ============================================================ -->
 <div class="d-flex align-items-center mb-3">
     <h3 class="mb-0 text-primary">By City</h3>
     <hr class="flex-grow-1 ms-3 my-0">
 </div>
 
-<!-- City Selector -->
 <div class="row mb-3">
     <div class="col-md-4">
         <label for="emergencyCitySelect" class="form-label fw-bold">Select City:</label>
@@ -68,7 +61,6 @@
     </div>
 </div>
 
-<!-- Evacuation Centers -->
 <div class="card mb-4">
     <div class="card-header bg-primary text-white">
         <h5 class="mb-0">Evacuation Centers — <span id="evacCityLabel">{{ cities[0].name }}</span></h5>
@@ -91,7 +83,6 @@
     </div>
 </div>
 
-<!-- Local Hotlines -->
 <div class="card">
     <div class="card-header bg-warning text-dark">
         <h5 class="mb-0">Local Hotlines — <span id="hotlineCityLabel">{{ cities[0].name }}</span></h5>

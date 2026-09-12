@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
         evacCityLabel.textContent = cityName;
         hotlineCityLabel.textContent = cityName;
 
-        // Evacuation centers
+        // evacuation centers
         evacTable.innerHTML = "";
         if (info.centers.length === 0) {
             evacTable.innerHTML = `<tr><td colspan="5" class="text-center text-muted">No data available.</td></tr>`;
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
 
-        // Local hotlines
+        // local hotlines
         hotlineTable.innerHTML = "";
         if (info.hotlines.length === 0) {
             hotlineTable.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No data available.</td></tr>`;
