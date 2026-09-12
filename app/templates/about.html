@@ -3,6 +3,147 @@
 {% block title %}About | Flood Risk Assessment System{% endblock %}
 
 {% block content %}
-<h1>About</h1>
-<p class="text-muted">Mission statement, technology explanation, data sources, and limitations will appear here.</p>
+
+<h1>About This Project</h1>
+
+<div class="row mt-4">
+    <div class="col-lg-8">
+
+        <h4>Mission</h4>
+        <p>
+            This system provides flood risk assessment for four Metro Manila cities
+            (Manila, Marikina, Pasig, and Quezon City) using historical weather data
+            and machine learning. It is an academic capstone project — not an official
+            flood warning service.
+        </p>
+
+        <h4 class="mt-4">How It Works</h4>
+        <p>
+            The system uses two machine learning models trained on five years of daily
+            weather and flood records (2016–2020):
+        </p>
+        <ul>
+            <li>
+                <strong>Regression model (CART Decision Tree):</strong>
+                predicts the expected <em>flood depth</em> in meters given current conditions.
+            </li>
+            <li>
+                <strong>Classification model (CART Decision Tree):</strong>
+                predicts the <em>risk level</em> (Low, Moderate, High) based on MGB flood
+                susceptibility thresholds.
+            </li>
+        </ul>
+        <p>
+            Both models take the same inputs: rainfall, river water level, soil moisture,
+            elevation, and city location (one-hot encoded).
+        </p>
+
+        <h4 class="mt-4">Why Decision Trees?</h4>
+        <p>
+            Flood relationships are non-linear and threshold-driven (e.g., a small increase
+            in rainfall past a certain point triggers disproportionately more flooding).
+            Decision trees handle this naturally. They also handle multicollinearity between
+            the four predictors better than linear models, and produce interpretable
+            decision rules that can be visualized.
+        </p>
+
+        <h4 class="mt-4">Data Sources</h4>
+        <ul>
+            <li><strong>Historical weather &amp; flood data (2016–2020):</strong> Kaggle — "Metro Manila Flood Prediction"</li>
+            <li><strong>Live weather:</strong> <a href="https://open-meteo.com" target="_blank">Open-Meteo</a> (rainfall, forecasts)</li>
+            <li><strong>Flood susceptibility thresholds:</strong> Mines and Geosciences Bureau (MGB)</li>
+            <li><strong>Flood event reports:</strong> LGU archives, news archives (self-compiled)</li>
+            <li><strong>Evacuation centers &amp; hotlines:</strong> LGU-published resources (self-compiled)</li>
+        </ul>
+
+        <h4 class="mt-4">Technology</h4>
+        <ul>
+            <li>Python (pandas, scikit-learn, Flask)</li>
+            <li>SQLite for local data storage</li>
+            <li>Leaflet.js for interactive maps</li>
+            <li>Chart.js and matplotlib for visualizations</li>
+            <li>Bootstrap 5 for responsive layout</li>
+        </ul>
+
+        <h4 class="mt-4">Limitations</h4>
+        <p>
+            This is a research tool. Please be aware of the following limitations before
+            interpreting its predictions:
+        </p>
+        <ul>
+            <li>
+                <strong>Coverage:</strong> only 4 of 16 Metro Manila cities are covered,
+                due to data availability.
+            </li>
+            <li>
+                <strong>Flood depth estimates:</strong> historical flood depths were compiled
+                from news and LGU reports (descriptive language converted to meters via a
+                documented reference table), not sensor measurements.
+            </li>
+            <li>
+                <strong>River water level:</strong> no reliable public API exists for real-time
+                river gauges. The system uses a monthly seasonal average per city as a proxy,
+                and clearly labels this in the interface.
+            </li>
+            <li>
+                <strong>Soil moisture:</strong> the training data's soil moisture scale is
+                source-specific and incompatible with Open-Meteo's m³/m³ units, so a monthly
+                seasonal average is used as a proxy.
+            </li>
+            <li>
+                <strong>Rainfall timing:</strong> today's rainfall value is a calendar-day
+                total (00:00–23:59) that blends observed rainfall with forecast rainfall for
+                the rest of the day — it is not a rolling 24-hour total.
+            </li>
+            <li>
+                <strong>Confidence scores:</strong> the classifier's confidence (e.g., "82%
+                High") reflects certainty in the classification, not flood occurrence
+                probability. Dry days (~98% of records) often produce 100% confidence because
+                the training set is heavily class-imbalanced.
+            </li>
+            <li>
+                <strong>Admin boundaries:</strong> city polygons are official administrative
+                boundaries, which for coastal cities (Manila) extend into Manila Bay.
+            </li>
+        </ul>
+
+        <h4 class="mt-4">Disclaimer</h4>
+        <div class="alert alert-warning">
+            <strong>Not for emergency use.</strong>
+            This system is intended for academic research and demonstration only.
+            For real flood warnings and evacuation instructions, always follow
+            PAGASA, NDRRMC, and your local government unit.
+        </div>
+
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Quick Facts</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Cities covered:</strong><br>Manila, Marikina, Pasig, Quezon City</p>
+                <p><strong>Training period:</strong><br>2016 – 2020</p>
+                <p><strong>Model:</strong><br>CART Decision Trees</p>
+                <p><strong>Target variables:</strong><br>Flood Depth (m), Risk Level</p>
+                <p class="mb-0"><strong>Framework:</strong><br>Flask + SQLite</p>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">Demo Mode</h5>
+            </div>
+            <div class="card-body">
+                <p class="small mb-2">
+                    Append <code>?demo=1</code> to the Home page URL to preview the
+                    interface with sample data (no live API calls).
+                </p>
+                <a href="/?demo=1" class="btn btn-sm btn-outline-secondary">Try demo mode</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

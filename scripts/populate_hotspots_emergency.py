@@ -89,14 +89,15 @@ with app.app_context():
     df_hotlines = pd.read_csv(HOTLINES_CSV)
     count = 0
     for _, row in df_hotlines.iterrows():
-        city_name = str(row["City"]).strip()
-        city_id = city_id_map.get(city_name)
+        scope = str(row["scope"]).strip()
+        city_id = None if scope.lower() == "national" else city_id_map.get(scope)
+
         h = Hotline(
             city_id=city_id,
-            agency_name=row["Agency"],
-            category=row["Category"],
-            service=row["Service"],
-            number=str(row["Number"]),
+            agency_name=row["agency"],
+            type=row["type"],
+            service=row["service"],
+            number=str(row["number"]),
         )
         db.session.add(h)
         count += 1

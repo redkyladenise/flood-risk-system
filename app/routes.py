@@ -50,7 +50,62 @@ def model_insights():
 
 @bp.route("/emergency")
 def emergency():
-    return render_template("emergency.html")
+    """
+    Emergency Resources page — national hotlines + per-city centers/local hotlines.
+    """
+    from app.db_models import EvacuationCenter, Hotline
+
+    cities = City.query.order_by(City.name).all()
+
+    # National hotlines (city_id is NULL)
+    national = Hotline.query.filter(Hotline.city_id.is_(None)).all()
+    national_list = [
+        {
+            "agency": h.agency_name,
+            "type": h.type,
+            "service": h.service,
+            "number": h.number,
+        }
+        for h in national
+    ]
+
+    # Per-city data
+    emergency_data = {}
+    total_centers = 0
+    total_capacity = 0
+
+    for city in cities:
+        centers = EvacuationCenter.query.filter_by(city_id=city.city_id).all()
+        hotlines = Hotline.query.filter_by(city_id=city.city_id).all()
+
+        emergency_data[city.name] = {
+            "centers": [
+                {
+                    "name": c.name,
+                    "district": c.district,
+                    "barangay": c.barangay,
+                    "address": c.address,
+                    "capacity": c.capacity,
+                }
+                for c in centers
+            ],
+            "hotlines": [
+                {
+                    "agency": h.agency_name,
+                    "type": h.type,
+                    "service": h.service,
+                    "number": h.number,
+                }
+                for h in hotlines
+            ],
+        }
+
+    return render_template(
+        "emergency.html",
+        cities=[{"name": c.name} for c in cities],
+        national_hotlines=national_list,
+        emergency_data=emergency_data,
+    )
 
 @bp.route("/about")
 def about():

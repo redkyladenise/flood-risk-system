@@ -64,15 +64,14 @@ class EvacuationCenter(db.Model):
 
     city = db.relationship("City", backref="evacuation_centers")
 
-
 class Hotline(db.Model):
     __tablename__ = "hotlines"
 
     hotline_id = db.Column(db.Integer, primary_key=True)
     city_id = db.Column(db.Integer, db.ForeignKey("cities.city_id"), nullable=True)  # nullable for national
     agency_name = db.Column(db.Text, nullable=False)
-    category = db.Column(db.Text)   
-    service = db.Column(db.Text)  
+    type = db.Column(db.Text)
+    service = db.Column(db.Text)
     number = db.Column(db.Text, nullable=False)
 
     city = db.relationship("City", backref="hotlines")

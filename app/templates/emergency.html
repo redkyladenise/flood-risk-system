@@ -3,6 +3,121 @@
 {% block title %}Emergency Resources | Flood Risk Assessment System{% endblock %}
 
 {% block content %}
+
 <h1>Emergency Resources</h1>
-<p class="text-muted">Evacuation centers and hotlines will appear here.</p>
+<p class="text-muted">
+    If you are in immediate danger, call <strong>911</strong>.
+    National hotlines apply everywhere. Evacuation centers and local hotlines are shown per city.
+</p>
+
+<!-- ============================================================ -->
+<!-- NATIONAL SECTION -->
+<!-- ============================================================ -->
+<div class="d-flex align-items-center mt-4 mb-3">
+    <h3 class="mb-0 text-danger">Nationwide</h3>
+    <hr class="flex-grow-1 ms-3 my-0">
+</div>
+
+<div class="card mb-5 border-danger">
+    <div class="card-header bg-danger text-white">
+        <h5 class="mb-0">National Emergency Hotlines</h5>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-striped mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Agency</th>
+                        <th>Type</th>
+                        <th>Service</th>
+                        <th>Number</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for h in national_hotlines %}
+                    <tr>
+                        <td><strong>{{ h.agency }}</strong></td>
+                        <td>{{ h.type }}</td>
+                        <td>{{ h.service }}</td>
+                        <td><strong>{{ h.number }}</strong></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- LOCAL SECTION -->
+<!-- ============================================================ -->
+<div class="d-flex align-items-center mb-3">
+    <h3 class="mb-0 text-primary">By City</h3>
+    <hr class="flex-grow-1 ms-3 my-0">
+</div>
+
+<!-- City Selector -->
+<div class="row mb-3">
+    <div class="col-md-4">
+        <label for="emergencyCitySelect" class="form-label fw-bold">Select City:</label>
+        <select id="emergencyCitySelect" class="form-select">
+            {% for city in cities %}
+            <option value="{{ city.name }}">{{ city.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+<!-- Evacuation Centers -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Evacuation Centers — <span id="evacCityLabel">{{ cities[0].name }}</span></h5>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-striped mb-0" id="evacTable">
+                <thead class="table-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>District</th>
+                        <th>Barangay</th>
+                        <th>Address</th>
+                        <th class="text-end">Capacity</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Local Hotlines -->
+<div class="card">
+    <div class="card-header bg-warning text-dark">
+        <h5 class="mb-0">Local Hotlines — <span id="hotlineCityLabel">{{ cities[0].name }}</span></h5>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-striped mb-0" id="hotlineTable">
+                <thead class="table-light">
+                    <tr>
+                        <th>Agency</th>
+                        <th>Type</th>
+                        <th>Service</th>
+                        <th>Number</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    window.EMERGENCY_DATA = {{ emergency_data | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/emergency.js') }}"></script>
 {% endblock %}
