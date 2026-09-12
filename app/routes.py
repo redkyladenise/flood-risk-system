@@ -6,9 +6,10 @@ from flask import Blueprint, render_template, request, jsonify
 from app import model_loader
 from datetime import date
 from datetime import timedelta
-from app.db_models import Hotspot, db, City, MonthlyAverage, WeatherRecord
+from app.db_models import Hotline, Hotspot, db, City, MonthlyAverage, WeatherRecord, EvacuationCenter
 from app import weather_api
 import time
+
 _map_data_cache = {"timestamp": 0, "data": None}
 _MAP_CACHE_TTL = 300 
 
@@ -40,21 +41,39 @@ def home():
 def simulator():
     return render_template("simulator.html")
 
-@bp.route("/live-data")
-def live_data():
-    return render_template("live_data.html")
+@bp.route("/live-weather")
+def live_weather():
+    cities = City.query.order_by(City.name).all()
+    return render_template(
+        "live_weather.html",
+        cities=[{"name": c.name} for c in cities],
+    )
 
 @bp.route("/model-insights")
 def model_insights():
-    return render_template("model_insights.html")
+    metrics = {
+        "regression": {
+            "model": "CART DecisionTreeRegressor (min_samples_leaf=20)",
+            "mae": 0.0010,
+            "rmse": 0.0116,
+            "r2": 0.9848,
+            "mape_global": 0.18,
+            "mape_nonzero": 13.90,
+        },
+        "classification": {
+            "model": "CART DecisionTreeClassifier (8 unscaled features)",
+            "accuracy": 0.9952,
+            "precision_macro": 0.8556,
+            "recall_macro": 0.9730,
+            "f1_macro": 0.9065,
+            "f1_weighted": 0.9956,
+            "kappa_quadratic": 0.9336,
+        },
+    }
+    return render_template("model_insights.html", metrics=metrics)
 
 @bp.route("/emergency")
 def emergency():
-    """
-    Emergency Resources page — national hotlines + per-city centers/local hotlines.
-    """
-    from app.db_models import EvacuationCenter, Hotline
-
     cities = City.query.order_by(City.name).all()
 
     # National hotlines (city_id is NULL)
@@ -71,8 +90,6 @@ def emergency():
 
     # Per-city data
     emergency_data = {}
-    total_centers = 0
-    total_capacity = 0
 
     for city in cities:
         centers = EvacuationCenter.query.filter_by(city_id=city.city_id).all()
@@ -401,3 +418,95 @@ def api_map_data():
     _map_data_cache["data"] = result
     _map_data_cache["timestamp"] = time.time()
     return jsonify(result)
+
+
+WMO_CODES = {
+    0:  ("Clear sky", "☀️"),
+    1:  ("Mainly clear", "🌤️"),
+    2:  ("Partly cloudy", "⛅"),
+    3:  ("Overcast", "☁️"),
+    45: ("Fog", "🌫️"),
+    48: ("Depositing rime fog", "🌫️"),
+    51: ("Light drizzle", "🌦️"),
+    53: ("Moderate drizzle", "🌦️"),
+    55: ("Dense drizzle", "🌦️"),
+    56: ("Light freezing drizzle", "🌧️"),
+    57: ("Dense freezing drizzle", "🌧️"),
+    61: ("Slight rain", "🌧️"),
+    63: ("Moderate rain", "🌧️"),
+    65: ("Heavy rain", "🌧️"),
+    66: ("Light freezing rain", "🌧️"),
+    67: ("Heavy freezing rain", "🌧️"),
+    71: ("Slight snow", "❄️"),
+    73: ("Moderate snow", "❄️"),
+    75: ("Heavy snow", "❄️"),
+    77: ("Snow grains", "❄️"),
+    80: ("Slight rain showers", "🌦️"),
+    81: ("Moderate rain showers", "🌧️"),
+    82: ("Violent rain showers", "⛈️"),
+    85: ("Slight snow showers", "🌨️"),
+    86: ("Heavy snow showers", "🌨️"),
+    95: ("Thunderstorm", "⛈️"),
+    96: ("Thunderstorm with slight hail", "⛈️"),
+    99: ("Thunderstorm with heavy hail", "⛈️"),
+}
+
+
+def wmo_info(code):
+    """Returns (label, icon) for a WMO weather code."""
+    return WMO_CODES.get(int(code), ("Unknown", "❓"))
+
+@bp.route("/api/live-weather")
+def api_live_weather():
+    """
+    Returns current conditions + 7-day forecast for a given city.
+    Query parameter: ?city=Manila
+    """
+    city_name = request.args.get("city", "Manila")
+    city = City.query.filter_by(name=city_name).first()
+    if not city:
+        return jsonify({"error": f"Unknown city: {city_name}"}), 400
+
+    data = weather_api.get_current_and_forecast(city.latitude, city.longitude)
+    if not data:
+        return jsonify({"error": "Weather API unavailable"}), 503
+
+    # Current conditions
+    cur = data["current"]
+    cur_label, cur_icon = wmo_info(cur.get("weather_code", 0))
+
+    current = {
+        "time": cur.get("time"),
+        "temperature_c": cur.get("temperature_2m"),
+        "apparent_temperature_c": cur.get("apparent_temperature"),
+        "humidity_pct": cur.get("relative_humidity_2m"),
+        "rain_mm": cur.get("rain"),
+        "pressure_hpa": cur.get("surface_pressure"),
+        "wind_speed_kmh": cur.get("wind_speed_10m"),
+        "wind_direction_deg": cur.get("wind_direction_10m"),
+        "weather_label": cur_label,
+        "weather_icon": cur_icon,
+    }
+
+    # 7-day forecast
+    daily = data["daily"]
+    forecast = []
+    for i in range(len(daily["time"])):
+        code = daily["weather_code"][i]
+        label, icon = wmo_info(code)
+        forecast.append({
+            "date": daily["time"][i],
+            "weather_code": code,
+            "weather_label": label,
+            "weather_icon": icon,
+            "temp_max_c": daily["temperature_2m_max"][i],
+            "temp_min_c": daily["temperature_2m_min"][i],
+            "precip_prob_pct": daily["precipitation_probability_max"][i],
+            "rain_sum_mm": daily["rain_sum"][i],
+        })
+
+    return jsonify({
+        "city": city.name,
+        "current": current,
+        "forecast": forecast,
+    })
