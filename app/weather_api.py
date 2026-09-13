@@ -82,3 +82,52 @@ def get_forecast_rainfall(latitude, longitude, days_ahead=1):
 
     target_date = (date.today() + timedelta(days=days_ahead)).isoformat()
     return data.get(target_date)
+
+
+def get_current_and_forecast(latitude, longitude):
+    """
+    Fetches current conditions + 7-day forecast for a location in one call.
+    Returns a dict with 'current' and 'daily' sections, or None on failure.
+    Uses the same 10-min cache as get_daily_rainfall.
+    """
+    cache_key = ("wx_current_7day", round(latitude, 3), round(longitude, 3))
+
+    if cache_key in _rainfall_cache:
+        cached = _rainfall_cache[cache_key]
+        if time.time() - cached["timestamp"] < _CACHE_TTL:
+            return cached["data"]
+
+    params = {
+        "latitude": latitude,
+        "longitude": longitude,
+        "current": ",".join([
+            "temperature_2m",
+            "relative_humidity_2m",
+            "apparent_temperature",
+            "rain",
+            "surface_pressure",
+            "wind_speed_10m",
+            "wind_direction_10m",
+            "weather_code",
+        ]),
+        "daily": ",".join([
+            "weather_code",
+            "temperature_2m_max",
+            "temperature_2m_min",
+            "precipitation_probability_max",
+            "rain_sum",
+        ]),
+        "forecast_days": 7,
+        "timezone": "Asia/Manila",
+    }
+
+    try:
+        response = requests.get(OPEN_METEO_URL, params=params, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+    except requests.RequestException as e:
+        print(f"Open-Meteo current+forecast request failed: {e}")
+        return None
+
+    _rainfall_cache[cache_key] = {"timestamp": time.time(), "data": data}
+    return data
