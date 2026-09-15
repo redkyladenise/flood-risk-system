@@ -2,23 +2,26 @@
 
 {% block title %}Simulator | Flood Risk Assessment System{% endblock %}
 {% block content %}
-<h1>What-If Simulator</h1>
+<h1>Flood Scenario Simulator</h1>
 <p class="text-muted">
-    Adjust the conditions below to see how the model predicts flood risk. This is fully self-contained and does not require live data.
+    Adjust the conditions below to see how the model predicts flood risk. Fully interactive and runs independently of live station feeds.
 </p>
 
 <div class="row mt-4 justify-content-center" id="simulatorRow">
-    <!-- Input Panel -->
     <div class="col-md-6" id="inputPanel">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
+        <div class="card h-100">
+            <div id="left-card-header" class="card-header text-white">
                 <h5 class="mb-0">Input Conditions</h5>
             </div>
-            <div class="card-body">
 
-                <!-- City Selector -->
+            <div class="card-body">
                 <div class="mb-4">
-                    <label for="citySelect" class="form-label fw-bold">City</label>
+                    <label for="citySelect" class="form-label fw-bold d-inline-flex align-items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="#1b5b7e" class="flex-shrink-0">
+                            <path d="M536.5-503.5Q560-527 560-560t-23.5-56.5Q513-640 480-640t-56.5 23.5Q400-593 400-560t23.5 56.5Q447-480 480-480t56.5-23.5ZM480-186q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm0 106Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Zm0-480Z"/>
+                        </svg>
+                        City
+                    </label>
                     <select id="citySelect" class="form-select">
                         <option value="Manila">Manila</option>
                         <option value="Marikina">Marikina</option>
@@ -27,11 +30,13 @@
                     </select>
                 </div>
 
-                <!-- Rainfall Slider + Numeric Input -->
                 <div class="mb-4">
-                    <label for="rainfallSlider" class="form-label fw-bold">Rainfall (mm)</label>
+                    <label for="rainfallSlider" class="form-label fw-bold d-inline-flex align-items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="#1b5b7e"><path d="M558-84q-15 8-30.5 2.5T504-102l-60-120q-8-15-2.5-30.5T462-276q15-8 30.5-2.5T516-258l60 120q8 15 2.5 30.5T558-84Zm240 0q-15 8-30.5 2.5T744-102l-60-120q-8-15-2.5-30.5T702-276q15-8 30.5-2.5T756-258l60 120q8 15 2.5 30.5T798-84Zm-480 0q-15 8-30.5 2.5T264-102l-60-120q-8-15-2.5-30.5T222-276q15-8 30.5-2.5T276-258l60 120q8 15 2.5 30.5T318-84Zm-18-236q-91 0-155.5-64.5T80-540q0-83 55-145t136-73q32-57 87.5-89.5T480-880q90 0 156.5 57.5T717-679q69 6 116 57t47 122q0 75-52.5 127.5T700-320H300Zm0-80h400q42 0 71-29t29-71q0-42-29-71t-71-29h-60v-40q0-66-47-113t-113-47q-48 0-87.5 26T333-704l-10 24h-25q-57 2-97.5 42.5T160-540q0 58 41 99t99 41Zm180-200Z"/></svg>
+                        Rainfall (mm)
+                    </label>
                     <div class="d-flex align-items-center gap-3">
-                        <input type="range" class="form-range flex-grow-1" id="rainfallSlider"
+                        <input type="range" class="form-range flex-grow-1 slider-fill" id="rainfallSlider"
                                min="0" max="100" step="0.5" value="25">
                         <input type="number" class="form-control" id="rainfallInput"
                                min="0" max="100" step="0.5" value="25"
@@ -40,11 +45,13 @@
                     <small class="text-muted">Range: 0–100 mm (training data max ≈ 53 mm)</small>
                 </div>
 
-                <!-- River Level Slider + Numeric Input -->
                 <div class="mb-4">
-                    <label for="riverSlider" class="form-label fw-bold">River Water Level (m)</label>
+                    <label for="riverSlider" class="form-label fw-bold d-inline-flex align-items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="#1b5b7e"><path d="M80-146v-78q29 0 49.5-9t41.5-19.5q21-10.5 46.5-19t63-8.5q37.5 0 62 8.5t45.5 19q21 10.5 42 19.5t50 9q29 0 50-9t42-19.5q21-10.5 46-19t62.5-8.5q37.5 0 62.5 8.5t46 19q21 10.5 42 19.5t49 9v78q-38 0-63.5-9T770-174.5q-21-10.5-41-19t-49-8.5q-28 0-48.5 8.5t-41 19Q570-164 544.5-155t-64.5 9q-39 0-64.5-9t-46-19.5Q349-185 329-193.5t-48.5-8.5q-28.5 0-49 8.5t-41.5 19Q169-164 143.5-155T80-146Zm0-178v-78q29 0 49.5-9t41.5-19.5q21-10.5 46.5-19t63-8.5q37.5 0 62 8.5t45.5 19q21 10.5 42 19.5t50 9q29 0 50-9t42-19.5q21-10.5 46-19t62-8.5q38 0 63 8.5t46 19q21 10.5 42 19.5t49 9v78q-38 0-63.5-9T770-352.5q-21-10.5-41-19t-49-8.5q-29 0-49.5 8.5t-41 19Q569-342 544-333t-64 9q-39 0-64.5-9t-46-19.5Q349-363 329-371.5t-48.5-8.5q-28.5 0-49 8.5t-41.5 19Q169-342 143.5-333T80-324Zm0-178v-78q29 0 49.5-9t41.5-19.5q21-10.5 46.5-19t63-8.5q37.5 0 62 8.5t45.5 19q21 10.5 42 19.5t50 9q29 0 50-9t42-19.5q21-10.5 46-19t62-8.5q38 0 63 8.5t46 19q21 10.5 42 19.5t49 9v78q-38 0-63.5-9T770-530.5q-21-10.5-41-19t-49-8.5q-28 0-48.5 8.5t-41 19Q570-520 544.5-511t-64.5 9q-39 0-64.5-9t-46-19.5Q349-541 329-549.5t-48.5-8.5q-28.5 0-49 8.5t-41.5 19Q169-520 143.5-511T80-502Zm0-178v-78q29 0 49.5-9t41.5-19.5q21-10.5 46.5-19t63-8.5q37.5 0 62 8.5t45.5 19q21 10.5 42 19.5t50 9q29 0 50-9t42-19.5q21-10.5 46-19t62-8.5q38 0 63 8.5t46 19q21 10.5 42 19.5t49 9v78q-38 0-63.5-9T770-708.5q-21-10.5-41-19t-49-8.5q-28 0-48.5 8.5t-41 19Q570-698 544.5-689t-64.5 9q-39 0-64.5-9t-46-19.5Q349-719 329-727.5t-48.5-8.5q-28.5 0-49 8.5t-41.5 19Q169-698 143.5-689T80-680Z"/></svg>
+                        River Water Level (m)
+                    </label>
                     <div class="d-flex align-items-center gap-3">
-                        <input type="range" class="form-range flex-grow-1" id="riverSlider"
+                        <input type="range" class="form-range flex-grow-1 slider-fill" id="riverSlider"
                                min="0" max="8" step="0.1" value="2.5">
                         <input type="number" class="form-control" id="riverInput"
                                min="0" max="8" step="0.1" value="2.5"
@@ -53,11 +60,13 @@
                     <small class="text-muted">Dataset-scale (training data max ≈ 6.40 m)</small>
                 </div>
 
-                <!-- Soil Moisture Slider + Numeric Input -->
                 <div class="mb-4">
-                    <label for="soilSlider" class="form-label fw-bold">Soil Moisture (%)</label>
+                    <label for="soilSlider" class="form-label fw-bold d-inline-flex align-items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="#1b5b7e"><path d="M491-200q12-1 20.5-9.5T520-230q0-14-9-22.5t-23-7.5q-41 3-87-22.5T343-375q-2-11-10.5-18t-19.5-7q-14 0-23 10.5t-6 24.5q17 91 80 130t127 35Zm-239.5 26Q160-268 160-408q0-100 79.5-217.5T480-880q161 137 240.5 254.5T800-408q0 140-91.5 234T480-80q-137 0-228.5-94ZM652-230.5Q720-301 720-408q0-73-60.5-165T480-774Q361-665 300.5-573T240-408q0 107 68 177.5T480-160q104 0 172-70.5ZM480-480Z"/></svg>
+                        Soil Moisture (%)
+                    </label>
                     <div class="d-flex align-items-center gap-3">
-                        <input type="range" class="form-range flex-grow-1" id="soilSlider"
+                        <input type="range" class="form-range flex-grow-1 slider-fill" id="soilSlider"
                                min="0" max="100" step="1" value="35">
                         <input type="number" class="form-control" id="soilInput"
                                min="0" max="100" step="1" value="35"
@@ -66,44 +75,73 @@
                     <small class="text-muted">Range: 0–100% (training data max ≈ 40%)</small>
                 </div>
 
-                <!-- Simulate Button -->
-                <button id="simulateBtn" class="btn btn-primary w-100 py-2">
-                    Simulate
+                <button id="simulateBtn" class="btn w-100 py-2 text-white fw-bold">
+                    SIMULATE
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Results Panel (hidden until Simulate clicked) -->
+    <!-- results -->
     <div class="col-md-6" id="resultsPanel" style="display: none;">
-        <div class="card">
-            <div class="card-header bg-success text-white">
+        <div class="card h-100 d-flex flex-column">
+            <div id="right-card-header" class="card-header text-white">
                 <h5 class="mb-0">Prediction Results</h5>
             </div>
             <div class="card-body">
                 <div id="resultsContent">
-                    <div class="row text-center mb-3">
-                        <div class="col-6">
-                            <div class="p-3 border rounded">
-                                <h6 class="text-muted">Risk Level</h6>
-                                <h3 id="riskLevelResult" class="mb-0">—</h3>
+                    <div class="row text-center mb-3 g-3">
+                        <div class="col-12 col-md-6">
+
+                            <div class="p-3 border rounded text-center">
+                                <h5 class="text-muted mb-2">Risk Level</h6>
+
+                                <svg viewBox="0 0 200 110" class="gauge-svg risk-gauge">
+                                    <path d="M 20 100 A 80 80 0 0 1 60 33.6" stroke="#198754" stroke-width="20" fill="none" stroke-linecap="butt"/>
+                                    <path d="M 60 33.6 A 80 80 0 0 1 140 33.6" stroke="#ffc107" stroke-width="20" fill="none" stroke-linecap="butt"/>
+                                    <path d="M 140 33.6 A 80 80 0 0 1 180 100" stroke="#dc3545" stroke-width="20" fill="none" stroke-linecap="butt"/>
+
+                                    <!-- pointer -->
+                                    <line id="gaugePointer" x1="100" y1="100" x2="100" y2="30"
+                                        stroke="#212529" stroke-width="3" stroke-linecap="round"
+                                        transform="rotate(30, 100, 100)"/>
+                                    <circle cx="100" cy="100" r="6" fill="#212529"/>
+                                </svg>
+
+                                <h4 id="riskLevelResult" class="mb-0 mt-2 fw-bold">—</h3>
+                            </div>
+
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="p-3 border rounded text-center">
+                                <h5 class="text-muted mb-2">Confidence</h6>
+
+                                <svg viewBox="0 0 200 110" class="gauge-svg confidence-gauge">
+                                    <path d="M 20 100 A 80 80 0 0 1 180 100"
+                                        stroke="#e9ecef" stroke-width="20" fill="none" stroke-linecap="butt"/>
+
+                                    <path id="confidenceArc"
+                                        d="M 20 100 A 80 80 0 0 1 180 100"
+                                        stroke="#60b9e0" stroke-width="20" fill="none" stroke-linecap="butt"
+                                        stroke-dasharray="251.3" stroke-dashoffset="251.3"/>
+                                </svg>
+
+                                <h4 id="confidenceResult" class="mb-0 mt-2">—</h3>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="p-3 border rounded">
-                                <h6 class="text-muted">Confidence</h6>
-                                <h3 id="confidenceResult" class="mb-0">—</h3>
-                            </div>
-                        </div>
+
+                        
                     </div>
 
-                    <div class="p-3 border rounded mb-3">
-                        <h6 class="text-muted">Estimated Flood Depth</h6>
+                    <div class="p-3 border rounded mb-3 d-flex align-items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="26px" viewBox="0 -960 960 960" width="26px" fill="#212529" class="me-2"><path d="M80-80v-80q38 0 56.5-20t77.5-20q59 0 77 20t56 20q38 0 56-20t77-20q57 0 77.5 20t56.5 20q38 0 56-20t77-20q59 0 77 20t56 20v80q-58 0-77-20t-56-20q-37 0-56 20t-77 20q-58 0-77.5-20T480-120q-38 0-56 20t-77 20q-59 0-77-20t-56-20q-37 0-56 20T80-80Zm267-180q-57 0-77-20t-56-20q-35 0-56 20t-78 20v-80q38 0 56-20t77-20q6 0 12 .5t11 1.5l-38-140-55 72-63-50 311-384 461 176-29 75-84-34 81 301q14 8 27.5 15t32.5 7v80q-57-1-77-20.5T747-300q-38 0-56 20t-77 20q-57 0-77.5-20T480-300q-38 0-56 20t-77 20Zm0-80q30 0 46.5-14t50.5-22l-37-136 155-41 56 212q31-2 49-18.5t65-19.5l-86-321-229-84-157 188 69 254q4 1 8.5 1.5t9.5.5Zm149-222Z"/></svg>
+                        <h5 class="text-muted mb-0 me-2">Estimated Flood Depth:</h5>
                         <h4 id="depthResult" class="mb-0">—</h4>
                     </div>
 
+
                     <div class="p-3 border rounded">
-                        <h6 class="text-muted">Probability Breakdown</h6>
+                        <h5 class="text-muted mb-3">Probability Breakdown</h5>
                         <div id="probabilityBreakdown"></div>
                     </div>
                 </div>
@@ -114,5 +152,7 @@
 {% endblock %}
 
 {% block scripts %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/simulator.css') }}" />
+
 <script src="{{ url_for('static', filename='js/simulator.js') }}"></script>
 {% endblock %}

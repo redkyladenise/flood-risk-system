@@ -1,9 +1,22 @@
 city_name,name,description,latitude,longitude
-Manila,España–Antipolo,Flood-prone intersection,14.6175,121.0011
-Manila,Taft Avenue–PGH,Flood-prone road section,14.5797,120.9856
-Marikina,SM Marikina–Marcos Highway,Flood-prone area near river,14.6246,121.084
-Marikina,Barangka,Low-lying flood-prone area,14.635,121.095
-Pasig,C-5–Bagong Ilog,Flood-prone road section,14.5607,121.0662
-Pasig,Manggahan Floodway,Flood-prone floodway area,14.646,121.097
-Quezon City,Araneta–E. Rodriguez,Frequently flooded intersection,14.6099,121.0171
-Quezon City,EDSA–Quezon Tunnel,Flood-prone underpass,14.641,121.033
+Manila,España Blvd. – Antipolo to Blumentritt,Flood-prone road corridor in Central Manila,14.6108,120.9947
+Manila,Taft Ave. – Quirino Ave.,Flood-prone major road intersection,14.5638,120.9896
+Manila,Taft Ave. – Pedro Gil,Flood-prone section along Taft Avenue,14.5769,120.9896
+Manila,Blumentritt – Dimasalang,Low-lying flood-prone corridor,14.6215,120.9828
+Manila,Dapitan – Maceda,Flood-prone road section in Central Manila,14.6237,120.9941
+Marikina,Tumana,Low-lying community beside the Marikina River,14.6658,121.0944
+Marikina,Provident Village,Residential area within the Marikina River floodplain,14.6459,121.0984
+Marikina,Barangka,Flood-prone community near the Marikina River,14.6504,121.0974
+Marikina,Santo Niño,Low-lying community vulnerable to river flooding,14.6389,121.1028
+Marikina,Marcos Highway – LRT Santolan,Flood-prone transport corridor near the river system,14.6365,121.102
+Quezon City,Tandang Sora Ave.,Flood-prone corridor in northern Quezon City,14.6865,121.0312
+Quezon City,Commonwealth Ave. – Bitoon Circle,Flood-prone intersection along Commonwealth Avenue,14.6868,121.075
+Quezon City,Araneta Ave. – E. Rodriguez,Flood-prone major road intersection,14.628,121.017
+Quezon City,Quezon Ave. – Biak na Bato,Flood-prone section along Quezon Avenue,14.6407,121.0066
+Quezon City,EDSA – Aurora Blvd.,Flood-prone major transport intersection,14.6197,121.0222
+Pasig,Rosario–Cainta Road – Tramo,Flood-prone road section near the Pasig-Cainta boundary,14.596,121.0865
+Pasig,Imelda Ave. – V.V. Soliven,Flood-prone residential and commercial corridor,14.5967,121.0879
+Pasig,Amang Rodriguez Ave. – Ligaya,Flood-prone corridor near the Marikina-Pasig area,14.637,121.1008
+Pasig,C-5 – Bagong Ilog,Flood-prone section near the Pasig River,14.5726,121.0784
+Pasig,C-5 – Eagle St.,Flood-prone intersection along C-5,14.6007,121.0805
+Pasig,Valle Verde – C-5 Ortigas,Flood-prone residential area near C-5,14.5865,121.0645

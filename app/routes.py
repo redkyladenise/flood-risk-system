@@ -1,12 +1,10 @@
-from concurrent.futures import ThreadPoolExecutor
-
 import numpy as np
 import pandas as pd
 from flask import Blueprint, render_template, request, jsonify
 from app import model_loader
 from datetime import date
 from datetime import timedelta
-from app.db_models import Hotline, Hotspot, db, City, MonthlyAverage, WeatherRecord, EvacuationCenter
+from app.db_models import Hotline, Hotspot, City, MonthlyAverage, EvacuationCenter
 from app import weather_api
 import time
 
@@ -17,11 +15,6 @@ bp = Blueprint("main", __name__)
 
 @bp.route("/")
 def home():
-    """
-    Home page: assessment board, alert banner, forecast summary, interactive map.
-    Passes city list for the dropdown and map setup.
-    Predictions are fetched separately via /api/nowcast and /api/forecast.
-    """
     cities = City.query.order_by(City.name).all()
 
     city_list = [
@@ -49,11 +42,11 @@ def live_weather():
         cities=[{"name": c.name} for c in cities],
     )
 
-@bp.route("/model-insights")
-def model_insights():
+@bp.route("/model-analytics")
+def model_analytics():
     metrics = {
         "regression": {
-            "model": "CART DecisionTreeRegressor (min_samples_leaf=20)",
+            "model": "CART DecisionTreeRegressor",
             "mae": 0.0010,
             "rmse": 0.0116,
             "r2": 0.9848,
@@ -61,7 +54,7 @@ def model_insights():
             "mape_nonzero": 13.90,
         },
         "classification": {
-            "model": "CART DecisionTreeClassifier (8 unscaled features)",
+            "model": "CART DecisionTreeClassifier",
             "accuracy": 0.9952,
             "precision_macro": 0.8556,
             "recall_macro": 0.9730,
@@ -70,30 +63,66 @@ def model_insights():
             "kappa_quadratic": 0.9336,
         },
     }
-    return render_template("model_insights.html", metrics=metrics)
+    return render_template("model_analytics.html", metrics=metrics)
 
 @bp.route("/emergency")
 def emergency():
     cities = City.query.order_by(City.name).all()
+    national_rows = Hotline.query.filter(Hotline.city_id.is_(None)).all()
 
-    # National hotlines (city_id is NULL)
-    national = Hotline.query.filter(Hotline.city_id.is_(None)).all()
-    national_list = [
-        {
-            "agency": h.agency_name,
-            "type": h.type,
-            "service": h.service,
-            "number": h.number,
-        }
-        for h in national
+    NATIONAL_ORDER = [
+        "NDRRMC",
+        "PNP",
+        "Red Cross",
+        "MMDA",
     ]
 
-    # Per-city data
+    national_by_agency = {}
+    for h in national_rows:
+        national_by_agency.setdefault(h.agency_name, []).append(h)
+
+    national_list = []
+    for agency in NATIONAL_ORDER:
+        rows = national_by_agency.get(agency, [])
+        if not rows:
+            continue
+        service = rows[0].service
+        numbers = [r.number for r in rows]
+        national_list.append({
+            "agency": agency,
+            "service": service,
+            "numbers": numbers,
+            "both_equal": agency == "NDRRMC",
+        })
+
     emergency_data = {}
 
     for city in cities:
         centers = EvacuationCenter.query.filter_by(city_id=city.city_id).all()
         hotlines = Hotline.query.filter_by(city_id=city.city_id).all()
+
+        agencies_map = {}
+        agency_order = []
+        for h in hotlines:
+            if h.agency_name not in agencies_map:
+                agencies_map[h.agency_name] = []
+                agency_order.append(h.agency_name)
+            agencies_map[h.agency_name].append(h)
+
+        agencies_list = []
+        for agency_name in agency_order:
+            rows = agencies_map[agency_name]
+            agencies_list.append({
+                "agency": agency_name,
+                "numbers": [
+                    {
+                        "type": r.type,
+                        "number": r.number,
+                        "sim": r.sim,
+                    }
+                    for r in rows
+                ],
+            })
 
         emergency_data[city.name] = {
             "centers": [
@@ -102,19 +131,11 @@ def emergency():
                     "district": c.district,
                     "barangay": c.barangay,
                     "address": c.address,
-                    "capacity": c.capacity,
                 }
                 for c in centers
             ],
-            "hotlines": [
-                {
-                    "agency": h.agency_name,
-                    "type": h.type,
-                    "service": h.service,
-                    "number": h.number,
-                }
-                for h in hotlines
-            ],
+            "agencies": agencies_list,
+            "is_multi_agency": len(agencies_list) > 1,
         }
 
     return render_template(
@@ -128,21 +149,10 @@ def emergency():
 def about():
     return render_template("about.html")
 
-# ============== SIMULATION API +=================
+# ============== SIMULATION API =================
 @bp.route("/api/simulate", methods=["POST"])
 def api_simulate():
-    """
-    Receives slider values from the Simulator page, runs predictions
-    through both trained models, and returns results as JSON.
-    """
     data = request.get_json()
-
-    # rainfall = float(data.get("rainfall", 0))
-    # river_level = float(data.get("river_level", 0))
-    # soil_moisture = float(data.get("soil_moisture", 0))
-    # city = data.get("city", "Manila")
-
-    # =====Future NOTE: verify max values====
     try:
         rainfall = float(data.get("rainfall", 0))
     except (TypeError, ValueError):
@@ -198,14 +208,12 @@ def api_simulate():
         "Location_Manila", "Location_Marikina", "Location_Pasig", "Location_Quezon City"
     ])
 
-    # run predictions
     predicted_depth = float(model_loader.regressor.predict(X)[0])
     predicted_risk = model_loader.classifier.predict(X)[0]
 
-    # get all three probabilities (low, moderate, high)
     proba = model_loader.classifier.predict_proba(X)[0]
     class_labels = model_loader.classifier.classes_.tolist()
-    confidence = float(max(proba)) * 100 # about final prediction (has max proba)
+    confidence = float(max(proba)) * 100
 
     # proba dict (Risk level - probabaility)
     proba_dict = {
@@ -227,7 +235,7 @@ def api_simulate():
         }
     })
 
-# ============== LIVE WEATHER API +=================
+# ============== LIVE WEATHER API =================
 
 def _build_features(city, rainfall, river_level, soil_moisture):
     """
@@ -304,7 +312,6 @@ def api_nowcast():
 def api_forecast():
     """
     Returns today's (nowcast), tomorrow's (24h), and +48h forecasted risk for a given city, along with a trend indicator.
-
     Query parameter: ?city=Manila
     """
     city_name = request.args.get("city", "Manila")
@@ -401,7 +408,7 @@ def api_map_data():
             "depth_m": round(float(model_loader.regressor.predict(X)[0]), 3),
         }
 
-    # Hotspots
+    # hotspots
     hotspots = Hotspot.query.all()
     hotspot_list = [
         {
@@ -420,41 +427,41 @@ def api_map_data():
     return jsonify(result)
 
 
+# WMO Weather Interpretation Codes (label, emoji, png_filename or None)
 WMO_CODES = {
-    0:  ("Clear sky", "☀️"),
-    1:  ("Mainly clear", "🌤️"),
-    2:  ("Partly cloudy", "⛅"),
-    3:  ("Overcast", "☁️"),
-    45: ("Fog", "🌫️"),
-    48: ("Depositing rime fog", "🌫️"),
-    51: ("Light drizzle", "🌦️"),
-    53: ("Moderate drizzle", "🌦️"),
-    55: ("Dense drizzle", "🌦️"),
-    56: ("Light freezing drizzle", "🌧️"),
-    57: ("Dense freezing drizzle", "🌧️"),
-    61: ("Slight rain", "🌧️"),
-    63: ("Moderate rain", "🌧️"),
-    65: ("Heavy rain", "🌧️"),
-    66: ("Light freezing rain", "🌧️"),
-    67: ("Heavy freezing rain", "🌧️"),
-    71: ("Slight snow", "❄️"),
-    73: ("Moderate snow", "❄️"),
-    75: ("Heavy snow", "❄️"),
-    77: ("Snow grains", "❄️"),
-    80: ("Slight rain showers", "🌦️"),
-    81: ("Moderate rain showers", "🌧️"),
-    82: ("Violent rain showers", "⛈️"),
-    85: ("Slight snow showers", "🌨️"),
-    86: ("Heavy snow showers", "🌨️"),
-    95: ("Thunderstorm", "⛈️"),
-    96: ("Thunderstorm with slight hail", "⛈️"),
-    99: ("Thunderstorm with heavy hail", "⛈️"),
+    0:  ("Clear sky", "☀️", "clear-sky.png"),
+    1:  ("Mainly clear", "🌤️", "partly-cloudy.png"),
+    2:  ("Partly cloudy", "⛅", "partly-cloudy.png"),
+    3:  ("Overcast", "☁️", "cloudy.png"),
+    45: ("Cloudy", "🌫️", "cloudy.png"),
+    48: ("Depositing rime fog", "🌫️", "cloudy.png"),
+    51: ("Light drizzle", "🌦️", "slight-rain.png"),
+    53: ("Moderate drizzle", "🌦️", "slight-rain.png"),
+    55: ("Dense drizzle", "🌦️", "slight-rain.png"),
+    56: ("Light freezing drizzle", "🌧️", "slight-rain.png"),
+    57: ("Dense freezing drizzle", "🌧️", "slight-rain.png"),
+    61: ("Slight rain", "🌧️", "slight-rain.png"),
+    63: ("Moderate rain", "🌧️", "heavy-rain.png"),
+    65: ("Heavy rain", "🌧️", "heavy-rain.png"),
+    66: ("Light freezing rain", "🌧️", "heavy-rain.png"),
+    67: ("Heavy freezing rain", "🌧️", "heavy-rain.png"),
+    71: ("Slight snow", "❄️", None),
+    73: ("Moderate snow", "❄️", None),
+    75: ("Heavy snow", "❄️", None),
+    77: ("Snow grains", "❄️", None),
+    80: ("Slight rain showers", "🌦️", "slight-rain-showers.png"),
+    81: ("Moderate rain showers", "🌧️", "heavy-rain.png"),
+    82: ("Violent rain showers", "⛈️", "violent-rain-showers.png"),
+    85: ("Slight snow showers", "🌨️", None),
+    86: ("Heavy snow showers", "🌨️", None),
+    95: ("Thunderstorm", "⛈️", "thunderstorm.png"),
+    96: ("Thunderstorm", "⛈️", "thunderstorm.png"),
+    99: ("Thunderstorm", "⛈️", "thunderstorm.png"),
 }
 
-
 def wmo_info(code):
-    """Returns (label, icon) for a WMO weather code."""
-    return WMO_CODES.get(int(code), ("Unknown", "❓"))
+    """Returns (label, emoji, png_filename) for a WMO weather code."""
+    return WMO_CODES.get(int(code), ("Unknown", "❓", None))
 
 @bp.route("/api/live-weather")
 def api_live_weather():
@@ -471,9 +478,9 @@ def api_live_weather():
     if not data:
         return jsonify({"error": "Weather API unavailable"}), 503
 
-    # Current conditions
+    # current conditions
     cur = data["current"]
-    cur_label, cur_icon = wmo_info(cur.get("weather_code", 0))
+    cur_label, cur_icon, cur_png = wmo_info(cur.get("weather_code", 0))
 
     current = {
         "time": cur.get("time"),
@@ -486,6 +493,7 @@ def api_live_weather():
         "wind_direction_deg": cur.get("wind_direction_10m"),
         "weather_label": cur_label,
         "weather_icon": cur_icon,
+        "weather_icon_png": f"/static/images/weather/{cur_png}" if cur_png else None,
     }
 
     # 7-day forecast
@@ -493,18 +501,19 @@ def api_live_weather():
     forecast = []
     for i in range(len(daily["time"])):
         code = daily["weather_code"][i]
-        label, icon = wmo_info(code)
+        label, icon, png = wmo_info(code)
         forecast.append({
             "date": daily["time"][i],
             "weather_code": code,
             "weather_label": label,
             "weather_icon": icon,
+            "weather_icon_png": f"/static/images/weather/{png}" if png else None,
             "temp_max_c": daily["temperature_2m_max"][i],
             "temp_min_c": daily["temperature_2m_min"][i],
             "precip_prob_pct": daily["precipitation_probability_max"][i],
             "rain_sum_mm": daily["rain_sum"][i],
         })
-
+        
     return jsonify({
         "city": city.name,
         "current": current,

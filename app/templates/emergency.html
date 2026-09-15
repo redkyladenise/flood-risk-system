@@ -4,109 +4,126 @@
 
 {% block content %}
 
-<h1>Emergency Resources</h1>
-<p class="text-muted">
-    If you are in immediate danger, call <strong>911</strong>.
-    National hotlines apply everywhere. Evacuation centers and local hotlines are shown per city.
-</p>
-
-<div class="d-flex align-items-center mt-4 mb-3">
-    <h3 class="mb-0 text-danger">Nationwide</h3>
-    <hr class="flex-grow-1 ms-3 my-0">
-</div>
-
-<div class="card mb-5 border-danger">
-    <div class="card-header bg-danger text-white">
-        <h5 class="mb-0">National Emergency Hotlines</h5>
-    </div>
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-striped mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th>Agency</th>
-                        <th>Type</th>
-                        <th>Service</th>
-                        <th>Number</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for h in national_hotlines %}
-                    <tr>
-                        <td><strong>{{ h.agency }}</strong></td>
-                        <td>{{ h.type }}</td>
-                        <td>{{ h.service }}</td>
-                        <td><strong>{{ h.number }}</strong></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+<div class="emergency-header mb-5">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <h1 class="mb-1">Emergency Resources</h1>
+            <p class="text-muted mb-0">
+                National and local emergency contacts. Call <strong>911</strong> if you are in immediate danger.
+            </p>
+        </div>
+        <div class="nine-one-one-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" height="26px" viewBox="0 -960 960 960" width="26px" fill="#FFFFFF"><path d="M798-120q-125 0-247-54.5T329-329Q229-429 174.5-551T120-798q0-18 12-30t30-12h162q14 0 25 9.5t13 22.5l26 140q2 16-1 27t-11 19l-97 98q20 37 47.5 71.5T387-386q31 31 65 57.5t72 48.5l94-94q9-9 23.5-13.5T670-390l138 28q14 4 23 14.5t9 23.5v162q0 18-12 30t-30 12Z"/></svg>
+            <div>
+                <div class="nine-one-one-number">911</div>
+                <div class="nine-one-one-label mt-1">National Emergency</div>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="d-flex align-items-center mb-3">
-    <h3 class="mb-0 text-primary">By City</h3>
-    <hr class="flex-grow-1 ms-3 my-0">
-</div>
+<div class="emergency-body">
+    
+    <div class="nationwide mb-5">
+        <h2 class="mb-3 fw-bold">Nationwide Hotlines</h2>
+        <div class="row g-3 mb-2">
+            {% for h in national_hotlines %}
+            <div class="col-md-6 col-lg-3">
+                <div class="national-card">
+                    <div class="national-agency">
+                        {{ h.agency }}
+                    </div>
+                    <div class="national-service">{{ h.service }}</div>
 
-<div class="row mb-3">
-    <div class="col-md-4">
-        <label for="emergencyCitySelect" class="form-label fw-bold">Select City:</label>
-        <select id="emergencyCitySelect" class="form-select">
-            {% for city in cities %}
-            <option value="{{ city.name }}">{{ city.name }}</option>
+                    {% if h.both_equal %}
+                        {% for num in h.numbers %}
+                            <div class="national-number-medium">{{ num }}</div>
+                        {% endfor %}
+                    {% else %}
+                        {% if h.numbers %}
+                            <div class="national-number-primary">{{ h.numbers[0] }}</div>
+                        {% endif %}
+                        {% for num in h.numbers[1:] %}
+                            <div class="national-number-secondary">{{ num }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
             {% endfor %}
-        </select>
-    </div>
-</div>
-
-<div class="card mb-4">
-    <div class="card-header bg-primary text-white">
-        <h5 class="mb-0">Evacuation Centers — <span id="evacCityLabel">{{ cities[0].name }}</span></h5>
-    </div>
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-striped mb-0" id="evacTable">
-                <thead class="table-light">
-                    <tr>
-                        <th>Name</th>
-                        <th>District</th>
-                        <th>Barangay</th>
-                        <th>Address</th>
-                        <th class="text-end">Capacity</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
         </div>
     </div>
-</div>
 
-<div class="card">
-    <div class="card-header bg-warning text-dark">
-        <h5 class="mb-0">Local Hotlines — <span id="hotlineCityLabel">{{ cities[0].name }}</span></h5>
-    </div>
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-striped mb-0" id="hotlineTable">
-                <thead class="table-light">
-                    <tr>
-                        <th>Agency</th>
-                        <th>Type</th>
-                        <th>Service</th>
-                        <th>Number</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+
+    <hr class="my-4">
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+        <h2 class="mb-2 fw-bold">Local Evacuation Centers &amp; Contacts</h2>
+
+        <div class="dropdown">
+            <button class="btn btn-light border rounded-pill d-flex align-items-center gap-2 px-4 py-2"
+                    type="button"
+                    id="emergencyCityDropdown"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#1b5b7e" viewBox="0 0 16 16">
+                    <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
+                </svg>
+                <span id="emergencyCityLabel" style="font-size: 1.1rem;">—</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                </svg>
+            </button>
+            <ul class="dropdown-menu" id="emergencyCityDropdownMenu"
+                aria-labelledby="emergencyCityDropdown">
+                {% for city in cities %}
+                <li>
+                    <a class="dropdown-item" href="#" data-city="{{ city.name }}">{{ city.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
-</div>
 
+
+    <h4 class="text-muted mb-3 fw-bold" id="hotlineSectionTitle">Local Emergency Hotlines</h4>
+    <div id="hotlineList"></div>
+
+    <div class="mt-4 mb-3">
+        <h4 class="mb-0 fw-bold" style="color: #595c5f">Evacuation Centers in <span id="evacCityLabel">{{ cities[0].name }}</span></h4>
+    </div>
+
+    <div class="row g-2 align-items-center mb-4">
+        <div class="col-md-4">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0 rounded-start-pill ps-3 text-muted">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="#64748b">
+                        <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                    </svg>
+                </span>
+                <input type="text" id="evacSearchInput" class="form-control evac-search-box border-start-0 rounded-end-pill ps-1" placeholder="Search center or barangay...">
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div id="districtPillContainer" class="d-flex flex-wrap gap-2 justify-content-md-end">
+            </div>
+        </div>
+    </div>
+
+    <div id="evacList" class="row g-3 mb-4"></div>
+
+    <div class="d-flex flex-column align-items-center gap-2 mb-5" id="evacPaginationWrapper">
+        <nav aria-label="Evacuation center pagination">
+            <ul class="pagination pagination-sm evac-pagination mb-0" id="evacPagination"></ul>
+        </nav>
+        <span class="text-muted small mt-2" id="evacCountLabel"></span>
+    </div>
+
+</div>
 {% endblock %}
 
 {% block scripts %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/emergency.css') }}" />
 <script>
     window.EMERGENCY_DATA = {{ emergency_data | tojson }};
 </script>

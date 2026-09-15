@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy() # init.py will use this to bind to Flask
+db = SQLAlchemy()
 
 class City(db.Model):
     __tablename__ = "cities"
@@ -21,7 +21,7 @@ class WeatherRecord(db.Model):
     city_id = db.Column(db.Integer, db.ForeignKey("cities.city_id"), nullable=False)
     date = db.Column(db.Date, nullable=False)
     rainfall_mm = db.Column(db.Float)
-    water_level_m = db.Column(db.Float)  # dataset-scale, documented limitation
+    water_level_m = db.Column(db.Float)  # dataset-scale
     soil_moisture_pct = db.Column(db.Float)
     flood_occurrence = db.Column(db.Boolean, default=False)  # reference only, not a model predictor
     flood_depth_m = db.Column(db.Float)  # regression target
@@ -29,16 +29,6 @@ class WeatherRecord(db.Model):
     data_source = db.Column(db.Text, default="Kaggle")  # "Kaggle" or "PAGASA"
 
     city = db.relationship("City", backref="weather_records")
-# --- skipped ---
-# class FloodEvent(db.Model):
-#     __tablename__ = "flood_events"
-
-#     event_id = db.Column(db.Integer, primary_key=True)
-#     event_name = db.Column(db.Text)
-#     date_start = db.Column(db.Date)
-#     date_end = db.Column(db.Date)
-#     reported_depth_description = db.Column(db.Text)
-#     source_citation = db.Column(db.Text)
 
 class MonthlyAverage(db.Model):
     __tablename__ = "monthly_averages"
@@ -60,7 +50,6 @@ class EvacuationCenter(db.Model):
     name = db.Column(db.Text, nullable=False)
     barangay = db.Column(db.Text)
     address = db.Column(db.Text)
-    capacity = db.Column(db.Integer)
 
     city = db.relationship("City", backref="evacuation_centers")
 
@@ -68,27 +57,14 @@ class Hotline(db.Model):
     __tablename__ = "hotlines"
 
     hotline_id = db.Column(db.Integer, primary_key=True)
-    city_id = db.Column(db.Integer, db.ForeignKey("cities.city_id"), nullable=True)  # nullable for national
+    city_id = db.Column(db.Integer, db.ForeignKey("cities.city_id"), nullable=True)
     agency_name = db.Column(db.Text, nullable=False)
     type = db.Column(db.Text)
     service = db.Column(db.Text)
     number = db.Column(db.Text, nullable=False)
+    sim = db.Column(db.Text, nullable=True)
 
     city = db.relationship("City", backref="hotlines")
-
-# --- skipped ---
-# class RiverStation(db.Model):
-#     __tablename__ = "river_stations"
-
-#     station_id = db.Column(db.Integer, primary_key=True)
-#     city_id = db.Column(db.Integer, db.ForeignKey("cities.city_id"), nullable=False)
-#     station_name = db.Column(db.Text)
-#     alarm_level_m = db.Column(db.Float)  # real-world scale, reference only
-#     critical_level_m = db.Column(db.Float)
-#     current_level_m = db.Column(db.Float, nullable=True)  # scraped or manually updated
-#     last_updated = db.Column(db.DateTime, nullable=True)
-#     latitude = db.Column(db.Float)
-#     longitude = db.Column(db.Float)
 
 
 class Hotspot(db.Model):
@@ -102,14 +78,3 @@ class Hotspot(db.Model):
     longitude = db.Column(db.Float)
 
     city = db.relationship("City", backref="hotspots") 
-
-# --- skipped ---
-# class ModelMetric(db.Model):
-#     __tablename__ = "model_metrics"
-
-#     metric_id = db.Column(db.Integer, primary_key=True)
-#     model_name = db.Column(db.Text)
-#     metric_name = db.Column(db.Text)  # MAE, RMSE, Accuracy, Recall, Kappa, etc.
-#     metric_value = db.Column(db.Float)
-#     date_generated = db.Column(db.DateTime, default=db.func.now())
-

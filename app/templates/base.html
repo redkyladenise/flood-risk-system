@@ -5,13 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Flood Risk Assessment System{% endblock %}</title>
     <link href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="{{ url_for('main.home') }}">FloodRisk</a>
+            <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('main.home') }}">
+                <img src="{{ url_for('static', filename='images/bahantas_logo.png') }}"
+                    alt="Logo"
+                    style="height: 36px; width: 36px; object-fit: contain;">
+                <span>Bahantas</span>
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -27,40 +32,42 @@
                         <a class="nav-link" href="{{ url_for('main.live_weather') }}">Live Weather</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('main.model_insights') }}">Model Insights</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('main.emergency') }}">Emergency</a>
+                        <a class="nav-link" href="{{ url_for('main.model_analytics') }}">Model Analytics</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('main.about') }}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-1" href="{{ url_for('main.emergency') }}">
+                            Emergency Info
+                             <span class="emergency-dot"></span>
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Main content area -->
     <main class="container my-4">
         {% block content %}
         {% endblock %}
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-light text-center py-3 mt-auto">
+    <footer class="footer text-center py-3 mt-auto">
         <div class="container">
             <p class="mb-1">
                 <small>
-                    Data sources: Kaggle (Metro Manila Flood Prediction 2016–2020), PAGASA, MGB, LGU archives.
+                    <strong>Data Sources: </strong>
+                    <a href="https://www.kaggle.com/datasets/denvermagtibay/metro-manila-flood-prediction-20162020-daily" target="_blank" rel="noopener noreferrer" class="source-link"> Kaggle - Metro Manila Flood Prediction (2016–2020)</a>; <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer" class="source-link">Open-Meteo</a>; MGB; LGU archives.
                 </small>
             </p>
             <p class="mb-1">
                 <small>
-                    Disclaimer: This system is for academic research purposes only. Predictions are estimates, not official flood warnings.
+                    <strong>Disclaimer: </strong> Predictions are model-based estimates, not official flood warnings.
                 </small>
             </p>
             <p class="mb-0">
-                <small>Last updated: 2026</small>
+                <small><strong>&copy; 2026 Bahantas</strong></small>
             </p>
         </div>
     </footer>

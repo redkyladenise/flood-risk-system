@@ -3,103 +3,101 @@
 {% block title %}Live Weather | Flood Risk Assessment System{% endblock %}
 
 {% block content %}
-
-<div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
-    <div>
-        <h1 class="mb-1">Live Weather</h1>
-        <p class="text-muted mb-0">
-            Current conditions and 7-day outlook from
-            <a href="https://open-meteo.com" target="_blank">Open-Meteo</a>.
-            Data refreshes on each page load.
-        </p>
+<div class="weather-hero">
+    <div id="weatherLoading" class="text-center py-5">
+        <div class="spinner-border text-light" role="status"></div>
+        <p class="text-muted mt-2 mb-0">Loading weather data…</p>
     </div>
-    <div class="text-end">
-        <label for="weatherCitySelect" class="form-label fw-bold mb-1">Select City:</label>
-        <select id="weatherCitySelect" class="form-select">
-            {% for city in cities %}
-            <option value="{{ city.name }}">{{ city.name }}</option>
-            {% endfor %}
-        </select>
+
+    <div id="weatherError" class="alert alert-warning d-none" role="alert">
+        Weather data unavailable. Please try again later.
     </div>
-</div>
 
-<!-- Loading indicator -->
-<div id="weatherLoading" class="text-center py-5">
-    <div class="spinner-border text-primary" role="status"></div>
-    <p class="text-muted mt-2 mb-0">Loading weather data…</p>
-</div>
-
-<!-- Error state -->
-<div id="weatherError" class="alert alert-warning d-none" role="alert">
-    Weather data unavailable. Please try again later.
-</div>
-
-<div id="weatherContent" style="display: none;">
-
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">Current Conditions — <span id="weatherCityLabel">—</span></h5>
-            <small id="weatherLastUpdated" class="text-white-50"></small>
+    <div id="weatherContent" style="display: none;">
+        <div class="weather-header">
+            <div class="dropdown">
+                <button class="btn weather-city-pill dropdown-toggle"
+                        type="button"
+                        id="weatherCityDropdown"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
+                    </svg>
+                    <span id="weatherCityLabel">—</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-dark" id="weatherCityDropdownMenu"
+                    aria-labelledby="weatherCityDropdown"></ul>
+            </div>
+            <span class="weather-date-label">(<span id="weatherDate">—</span>)</span>
         </div>
-        <div class="card-body">
-            <div class="row align-items-center">
-                <!-- Hero: icon + temp -->
-                <div class="col-md-5 text-center mb-3 mb-md-0">
-                    <div id="weatherIcon" style="font-size: 5rem; line-height: 1;">⛅</div>
-                    <h2 id="weatherTemp" class="mb-1">—</h2>
-                    <p id="weatherLabel" class="text-muted mb-1">—</p>
-                    <small class="text-muted">Feels like <span id="weatherFeelsLike">—</span></small>
+<div class="row align-items-center g-4 mb-4">
+            <div class="col-lg-7">
+                <div>
+                    <div class="temp-display" id="weatherTemp">—</div>
+                    <div class="condition-label" id="weatherLabel">—</div>
                 </div>
 
-                <!-- Metric cards -->
-                <div class="col-md-7">
-                    <div class="row g-3">
-                        <div class="col-6 col-md-6">
-                            <div class="p-3 border rounded h-100">
-                                <small class="text-muted d-block">Rain (current)</small>
-                                <div id="weatherRain" class="fw-bold">—</div>
+                <div class="row g-3 mt-4 weather-metrics-row" style="max-width: 420px;">
+                    <div class="col-6">
+                        <div class="detail-item">
+                            <div class="detail-icon-label">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor"><path d="M558-84q-15 8-30.5 2.5T504-102l-60-120q-8-15-2.5-30.5T462-276q15-8 30.5-2.5T516-258l60 120q8 15 2.5 30.5T558-84Zm240 0q-15 8-30.5 2.5T744-102l-60-120q-8-15-2.5-30.5T702-276q15-8 30.5-2.5T756-258l60 120q8 15 2.5 30.5T798-84Zm-480 0q-15 8-30.5 2.5T264-102l-60-120q-8-15-2.5-30.5T222-276q15-8 30.5-2.5T276-258l60 120q8 15 2.5 30.5T318-84Zm-18-236q-91 0-155.5-64.5T80-540q0-83 55-145t136-73q32-57 87.5-89.5T480-880q90 0 156.5 57.5T717-679q69 6 116 57t47 122q0 75-52.5 127.5T700-320H300Zm0-80h400q42 0 71-29t29-71q0-42-29-71t-71-29h-60v-40q0-66-47-113t-113-47q-48 0-87.5 26T333-704l-10 24h-25q-57 2-97.5 42.5T160-540q0 58 41 99t99 41Zm180-200Z"/></svg>
+                                Rain
                             </div>
+                            <div class="detail-value" id="weatherRain">—</div>
                         </div>
-                        <div class="col-6 col-md-6">
-                            <div class="p-3 border rounded h-100">
-                                <small class="text-muted d-block">Humidity</small>
-                                <div id="weatherHumidity" class="fw-bold">—</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="detail-item">
+                            <div class="detail-icon-label">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="M610-278q14-14 14-34t-14-34q-14-14-34-14t-34 14q-14 14-14 34t14 34q14 14 34 14t34-14Zm-223 14 237-237-51-51-237 237 51 51Zm31-206q14-14 14-34t-14-34q-14-14-34-14t-34 14q-14 14-14 34t14 34q14 14 34 14t34-14ZM259-187q-91-91-91-221 0-97 74.5-205T480-864q166 150 239 257t73 199q0 130-91 221T480-96q-130 0-221-91Zm391-51q70-70 70-170 0-68-54-149T480-769Q348-638 294-557t-54 149q0 100 70 170t170 70q100 0 170-70ZM480-480Z"/></svg>
+                                Humidity
                             </div>
+                            <div class="detail-value" id="weatherHumidity">—</div>
                         </div>
-                        <div class="col-6 col-md-6">
-                            <div class="p-3 border rounded h-100">
-                                <small class="text-muted d-block">Wind</small>
-                                <div id="weatherWind" class="fw-bold">—</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="detail-item">
+                            <div class="detail-icon-label">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="M456-144q-50 0-85-35t-35-85h72q0 20 13.8 34t34.2 14q20.4 0 34.2-13.8Q504-243.6 504-264q0-20.4-13.8-34.2Q476.4-312 456-312H96v-72h360q50 0 85 35t35 85q0 50-35 85t-85 35ZM96-552v-72h540q25 0 42.5-17.5T696-684q0-25-17.5-42.5T636-744q-25 0-42.5 17.5T576-684h-72q0-55 38.5-93.5T636-816q55 0 93.5 38.5T768-684q0 55-38.5 93.5T636-552H96Zm636 312v-72q25 0 42.5-17.5T792-372q0-25-17.5-42.5T731.95-432H96v-72h636q55 0 93.5 38.5T864-372q0 55-38.5 93.5T732-240Z"/></svg>
+                                Wind
                             </div>
+                            <div class="detail-value" id="weatherWind">—</div>
                         </div>
-                        <div class="col-6 col-md-6">
-                            <div class="p-3 border rounded h-100">
-                                <small class="text-muted d-block">Pressure</small>
-                                <div id="weatherPressure" class="fw-bold">—</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="detail-item">
+                            <div class="detail-icon-label">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="M192-384v-72h576v72H192Zm0-120v-72h576v72H192ZM444-96v-102l-57 57-51-51 144-144 144 144-51 51-57-57v102h-72Zm36-528L336-768l51-51 57 57v-102h72v102l57-57 51 51-144 144Z"/></svg>
+                                Pressure
                             </div>
+                            <div class="detail-value" id="weatherPressure">—</div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <div class="card">
-        <div class="card-header bg-secondary text-white">
-            <h5 class="mb-0">7-Day Forecast</h5>
-        </div>
-        <div class="card-body">
-            <div class="row g-3" id="forecastRow">
-                <!-- JS -->
+            <!-- On desktop: right column. On mobile: shifted up via CSS -->
+            <div class="col-lg-5 weather-icon-col d-flex justify-content-lg-end justify-content-center align-items-center">
+                <img id="weatherIcon"
+                    src=""
+                    alt="Weather icon"
+                    class="weather-icon-img">
             </div>
         </div>
-    </div>
 
+        <div class="forecast-card">
+            <div class="forecast-row" id="forecastRow"></div>
+        </div>
+
+    </div>
 </div>
 
 {% endblock %}
 
 {% block scripts %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/live_weather.css') }}" />
 <script>
     window.LIVE_WEATHER_CITIES = {{ cities | tojson }};
 </script>

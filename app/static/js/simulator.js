@@ -1,7 +1,4 @@
-// wait for the page to fully load before running any code
 document.addEventListener("DOMContentLoaded", function () {
-
-    // Get references to all the elements we need
     const citySelect = document.getElementById("citySelect");
     const rainfallSlider = document.getElementById("rainfallSlider");
     const riverSlider = document.getElementById("riverSlider");
@@ -18,10 +15,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const depthResult = document.getElementById("depthResult");
     const probabilityBreakdown = document.getElementById("probabilityBreakdown");
 
-    // -- sync sliders and numeric inputs (both directions) ---
+    function updateSliderFill(slider) {
+        const min = parseFloat(slider.min) || 0;
+        const max = parseFloat(slider.max) || 100;
+        const val = parseFloat(slider.value) || 0;
+        const pct = ((val - min) / (max - min)) * 100;
+        slider.style.setProperty("--fill", pct + "%");
+    }
 
+    // -- sync sliders and numeric inputs (both drections) ---
     rainfallSlider.addEventListener("input", function () {
         rainfallInput.value = rainfallSlider.value;
+        updateSliderFill(rainfallSlider);
     });
 
     rainfallInput.addEventListener("input", function () {
@@ -42,6 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     riverSlider.addEventListener("input", function () {
         riverInput.value = riverSlider.value;
+        updateSliderFill(riverSlider);
     });
 
     riverInput.addEventListener("input", function () {
@@ -62,6 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     soilSlider.addEventListener("input", function () {
         soilInput.value = soilSlider.value;
+        updateSliderFill(soilSlider);
     });
 
     soilInput.addEventListener("input", function () {
@@ -79,6 +86,26 @@ document.addEventListener("DOMContentLoaded", function () {
         soilInput.value = val;
         soilSlider.value = val;
     });
+
+    // scale/meter 
+    function updateRiskGauge(riskLevel) {
+        const pointer = document.getElementById("gaugePointer");
+        if (!pointer) return;
+        let angle = -60;
+        if (riskLevel === "Moderate") angle = 0;
+        else if (riskLevel === "High") angle = 60;
+
+        pointer.setAttribute("transform", `rotate(${angle}, 100, 100)`);
+    }
+
+    function updateConfidenceGauge(pct) {
+        const arc = document.getElementById("confidenceArc");
+        if (!arc) return;
+
+        const arcLength = 251.3;
+        const offset = arcLength * (1 - pct / 100);
+        arc.setAttribute("stroke-dashoffset", offset);
+    }
 
     // -- simulate button click handler ---
     simulateBtn.addEventListener("click", async function () {
@@ -107,25 +134,43 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const data = await response.json();
 
-            // update results
             riskLevelResult.textContent = data.risk_level;
+            riskLevelResult.style.color =
+                data.risk_level === "High" ? "#dc3545" :
+                data.risk_level === "Moderate" ? "#d39e00" :
+                "#198754";
+            updateRiskGauge(data.risk_level);
+
             confidenceResult.textContent = data.confidence_pct + "%";
+            updateConfidenceGauge(data.confidence_pct);
+
             depthResult.textContent = data.estimated_depth_m + " m";
 
             probabilityBreakdown.innerHTML = "";
-            const sortedProbs = Object.entries(data.probabilities).sort((a, b) => b[1] - a[1]);
+            const tierOrder = { "High": 0, "Moderate": 1, "Low": 2 };
+            const sortedProbs = Object.entries(data.probabilities).sort((a, b) => {
+                if (b[1] !== a[1]) return b[1] - a[1];
+                return (tierOrder[a[0]] ?? 99) - (tierOrder[b[0]] ?? 99);
+            });
+
+            const barColors = {
+                Low: "#198754",
+                Moderate: "#ffc107",
+                High: "#dc3545"
+            };
 
             sortedProbs.forEach(([label, prob]) => {
+                const color = barColors[label] || "#6c757d";
+
                 const row = document.createElement("div");
-                row.className = "d-flex justify-content-between mb-1";
+                row.className = "d-flex align-items-center mb-2";
                 row.innerHTML = `
-                    <span>${label}</span>
-                    <span>${prob.toFixed(1)}%</span>
+                    <span class="me-2 fw-bold" style="min-width: 75px;">${label}</span>
+                    <div class="prob-bar" style="background: ${color}; width: ${prob}%;"></div>
+                    <span class="ms-2 small fw-bold">${prob.toFixed(1)}%</span>
                 `;
                 probabilityBreakdown.appendChild(row);
             });
-
-            // show results
             resultsPanel.style.display = "block";
             simulatorRow.classList.remove("justify-content-center");
             
@@ -133,9 +178,12 @@ document.addEventListener("DOMContentLoaded", function () {
         } catch (error) {
             alert("Error running simulation: " + error.message);
         } finally {
-            // re-enable button
             simulateBtn.disabled = false;
             simulateBtn.textContent = "Simulate";
         }
     });
+
+    updateSliderFill(rainfallSlider);
+    updateSliderFill(riverSlider);
+    updateSliderFill(soilSlider);
 });

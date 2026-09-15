@@ -47,9 +47,15 @@ document.addEventListener("DOMContentLoaded", function () {
         return "bg-success text-white";
     }
 
+    function riskTextColorClass(risk) {
+        if (risk === "High") return "text-danger";
+        if (risk === "Moderate") return "text-warning";
+        return "text-success";
+    }
+
     function advisoryFor(risk, depthM) {
         if (!depthM || depthM <= 0) {
-            return "Conditions are normal — no immediate action needed.";
+            return "Conditions are normal. No immediate action needed.";
         }
 
         if (risk === "High") {
@@ -59,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return "Tire- to waist-level flooding. Roads are not passable to all types of vehicles (NPATV). Avoid flooded roads and monitor updates.";
         }
         // low risk, but depth > 0
-        return "Gutter- to knee-level flooding. Road access ranges from passable to all vehicles (PATV) to not passable to light vehicles (NPLV). Exercise caution.";
+        return "Gutter- to knee-level flooding. Roads passable to all vehicles (PATV) to not passable to light vehicles (NPLV). Exercise caution.";
     }
 
     // ---leaflet map---
@@ -152,16 +158,46 @@ document.addEventListener("DOMContentLoaded", function () {
                         fillOpacity: 0.45,
                     };
                 },
+
                 onEachFeature: function (feature, layer) {
                     const name = feature.properties.name;
                     const info = riskData[name] || {};
 
-                    layer.bindTooltip(`
-                        <strong>${name}</strong><br>
-                        Risk: ${info.risk_level || "—"}<br>
-                        Est. Depth: ${info.depth_m !== undefined ? info.depth_m.toFixed(2) + " m" : "—"}<br>
-                        Rainfall: ${info.rainfall_mm !== undefined ? info.rainfall_mm.toFixed(1) + " mm" : "—"}
-                    `, { sticky: true });
+                    let badgeBg = "#198754";
+                    if (info.risk_level === "High") badgeBg = "#dc3545";
+                    else if (info.risk_level === "Moderate") badgeBg = "#ffc107";
+
+                    const badgeTextColor = info.risk_level === "Moderate" ? "#212529" : "#ffffff";
+
+                    const depthText = info.depth_m !== undefined ? info.depth_m.toFixed(2) + " m" : "—";
+                    const rainText = info.rainfall_mm !== undefined ? info.rainfall_mm.toFixed(1) + " mm" : "—";
+
+                    const html = `
+                        <div class="map-tooltip">
+                            <div class="map-tooltip-title">${name}</div>
+                            <div class="map-tooltip-row">
+                                <span class="map-tooltip-label">Risk:</span>
+                                <span class="map-tooltip-badge" style="background:${badgeBg};color:${badgeTextColor};">
+                                    ${info.risk_level || "—"}
+                                </span>
+                            </div>
+                            <div class="map-tooltip-row">
+                                <span class="map-tooltip-label">Est. Depth:</span>
+                                <strong>${depthText}</strong>
+                            </div>
+                            <div class="map-tooltip-row">
+                                <span class="map-tooltip-label">Rainfall:</span>
+                                <strong>${rainText}</strong>
+                            </div>
+                        </div>
+                    `;
+
+                    layer.bindTooltip(html, {
+                        sticky: true,
+                        direction: "top",
+                        className: "custom-map-tooltip",
+                        opacity: 1,
+                    });
 
                     cityPolygons[name] = layer;
                 },
@@ -225,18 +261,26 @@ document.addEventListener("DOMContentLoaded", function () {
                 color: "#fff",
                 weight: 2,
                 opacity: 1,
-                fillOpacity: 0.9,
+                fillOpacity: 0.95,
             }).addTo(hotspotLayer);
 
-            marker.bindPopup(`
-                <strong>${h.name}</strong><br>
-                <small class="text-muted">${h.city || ""}</small><br>
-                <small>${h.description || ""}</small>
-            `);
+            const html = `
+                <div class="map-tooltip">
+                    <div class="map-tooltip-title">${h.name || "Hotspot"}</div>
+                    <div class="map-tooltip-row">
+                        <strong>${h.city || "—"}</strong>
+                    </div>
+                    <div class="map-tooltip-row">
+                    </div>
+                    <div class="map-tooltip-desc">${h.description || "—"}</div>
+                </div>
+            `;
 
-            marker.bindTooltip(h.name, {
+            marker.bindTooltip(html, {
+                sticky: true,
                 direction: "top",
-                offset: [0, -8],
+                className: "custom-map-tooltip hotspot-tooltip",
+                opacity: 1,
             });
         });
     }
@@ -280,13 +324,13 @@ document.addEventListener("DOMContentLoaded", function () {
             homeSoilMoisture.textContent = d.soil_moisture_pct.toFixed(1) + " %";
             homeAdvisory.textContent = advisoryFor(d.risk_level, d.depth_m);
 
-            riskBox.className = "text-center mb-3 p-3 border rounded " + riskColorClass(d.risk_level);
+            riskBox.className = "mb-3 p-3 border rounded d-flex justify-content-between align-items-center " + riskColorClass(d.risk_level);
+            homeRiskLevel.className = "risk-badge ms-2 " + riskTextColorClass(d.risk_level);
 
             assessmentLoading.style.display = "none";
             assessmentContent.style.display = "block";
             return;
         }
-
 
         assessmentLoading.style.display = "block";
         assessmentContent.style.display = "none";
@@ -304,8 +348,9 @@ document.addEventListener("DOMContentLoaded", function () {
             homeRiverLevel.textContent = data.water_level_m.toFixed(2) + " m";
             homeSoilMoisture.textContent = data.soil_moisture_pct.toFixed(1) + " %";
             homeAdvisory.textContent = advisoryFor(data.risk_level, data.estimated_depth_m);
-            // color the risk box
-            riskBox.className = "text-center mb-3 p-3 border rounded " + riskColorClass(data.risk_level);
+
+            riskBox.className = "mb-3 p-3 border rounded d-flex justify-content-between align-items-center " + riskColorClass(data.risk_level);
+            homeRiskLevel.className = "risk-badge ms-2 " + riskTextColorClass(data.risk_level);
 
             assessmentLoading.style.display = "none";
             assessmentContent.style.display = "block";
@@ -327,48 +372,45 @@ document.addEventListener("DOMContentLoaded", function () {
 
             forecastCards.innerHTML = "";
             const labelMap = {
-                today:    { name: "Today",     sub: "Nowcast" },
                 tomorrow: { name: "Tomorrow",  sub: "24-hour" },
-                plus48h:  { name: "+48 Hours", sub: "2-day" },
+                plus48h:  { name: "Day 2", sub: "2-day" },
             };
 
             const fakeDays = [
-                { label: "today",    risk_level: d.risk_level,               estimated_depth_m: d.depth_m,               rainfall_mm: d.rainfall_mm,               confidence_pct: d.confidence_pct },
                 { label: "tomorrow", risk_level: d.risk_level === "Low" ? "Moderate" : d.risk_level, estimated_depth_m: d.depth_m * 1.2, rainfall_mm: d.rainfall_mm * 1.3, confidence_pct: 70 },
                 { label: "plus48h",  risk_level: d.risk_level,               estimated_depth_m: d.depth_m * 0.9,          rainfall_mm: d.rainfall_mm * 0.8,          confidence_pct: 78 },
             ];
 
             fakeDays.forEach(p => {
                 const meta = labelMap[p.label];
+
                 let borderClass = "border-secondary";
-                if (p.risk_level === "High") borderClass = "border-danger border-2";
-                else if (p.risk_level === "Moderate") borderClass = "border-warning border-2";
-                else if (p.risk_level === "Low") borderClass = "border-success border-2";
+                if (p.risk_level === "High") borderClass = "border-danger";
+                else if (p.risk_level === "Moderate") borderClass = "border-warning";
+                else if (p.risk_level === "Low") borderClass = "border-success";
+
+                const baseDate = new Date();
+                baseDate.setDate(baseDate.getDate() + (p.label === "tomorrow" ? 1 : 2));
+                const dateStr = baseDate.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
                 const col = document.createElement("div");
-                col.className = "col-md-4";
+                col.className = "col-6";
                 col.innerHTML = `
-                    <div class="card h-100 ${borderClass}">
-                        <div class="card-header text-center bg-light">
-                            <strong>${meta.name}</strong>
-                            <div class="small text-muted">${meta.sub}</div>
-                        </div>
-                        <div class="card-body text-center">
-                            <div class="badge ${riskColorClass(p.risk_level)} mb-3" style="font-size: 1.1rem; padding: 0.5rem 1rem;">
+                    <div class="card h-100 ${borderClass} border-2">
+                        <div class="card-body p-2 text-center">
+                            <div class="small fw-bold">${meta.name}</div>
+                            <div class="small text-muted" style="font-size: 0.8rem;">${dateStr}</div>
+                            <div class="badge ${riskColorClass(p.risk_level)} my-1" style="font-size: 0.9rem;">
                                 ${p.risk_level}
                             </div>
-                            <div class="small text-start">
-                                <div class="d-flex justify-content-between mb-1">
+                            <div class="small" style="font-size: 0.75rem;">
+                                <div>
                                     <span class="text-muted">Est. Depth:</span>
                                     <strong>${p.estimated_depth_m.toFixed(2)} m</strong>
                                 </div>
-                                <div class="d-flex justify-content-between mb-1">
-                                    <span class="text-muted">Rainfall:</span>
+                                <div>
+                                    <span class="text-muted">Rain:</span>
                                     <strong>${p.rainfall_mm.toFixed(1)} mm</strong>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <span class="text-muted">Confidence:</span>
-                                    <strong>${p.confidence_pct.toFixed(0)}%</strong>
                                 </div>
                             </div>
                         </div>
@@ -406,43 +448,43 @@ document.addEventListener("DOMContentLoaded", function () {
 
             forecastCards.innerHTML = "";
             const labelMap = {
-                today:    { name: "Today",     sub: "Nowcast" },
                 tomorrow: { name: "Tomorrow",  sub: "24-hour" },
-                plus48h:  { name: "+48 Hours", sub: "2-day" }
+                plus48h:  { name: "Day 2", sub: "2-day" }
             };
 
-            data.predictions.forEach(p => {
+            const forecastOnly = data.predictions.filter(p => p.label !== "today");
+
+            forecastOnly.forEach(p => {
                 const meta = labelMap[p.label] || { name: p.label, sub: "" };
 
                 let borderClass = "border-secondary";
-                if (p.risk_level === "High") borderClass = "border-danger border-2";
-                else if (p.risk_level === "Moderate") borderClass = "border-warning border-2";
-                else if (p.risk_level === "Low") borderClass = "border-success border-2";
+                if (p.risk_level === "High") borderClass = "border-danger";
+                else if (p.risk_level === "Moderate") borderClass = "border-warning";
+                else if (p.risk_level === "Low") borderClass = "border-success";
+
+                const dateStr = new Date(p.date + "T00:00:00").toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric"
+                });
 
                 const col = document.createElement("div");
-                col.className = "col-md-4";
+                col.className = "col-6";
                 col.innerHTML = `
-                    <div class="card h-100 ${borderClass}">
-                        <div class="card-header text-center bg-light">
-                            <strong>${meta.name}</strong>
-                            <div class="small text-muted">${meta.sub}</div>
-                        </div>
-                        <div class="card-body text-center">
-                            <div class="badge ${riskColorClass(p.risk_level)} mb-3" style="font-size: 1.1rem; padding: 0.5rem 1rem;">
+                    <div class="card h-100 ${borderClass} border-2">
+                        <div class="card-body p-2 text-center">
+                            <div class="fw-bold">${meta.name}</div>
+                            <div class="text-muted" style="font-size: 0.8rem;">${dateStr}</div>
+                            <div class="badge ${riskColorClass(p.risk_level)} my-1" style="font-size: 0.9rem;">
                                 ${p.risk_level}
                             </div>
-                            <div class="small text-start">
-                                <div class="d-flex justify-content-between mb-1">
+                            <div class="small" style="font-size: 0.75rem;">
+                                <div>
                                     <span class="text-muted">Est. Depth:</span>
                                     <strong>${p.estimated_depth_m.toFixed(2)} m</strong>
                                 </div>
-                                <div class="d-flex justify-content-between mb-1">
-                                    <span class="text-muted">Rainfall:</span>
+                                <div>
+                                    <span class="text-muted">Rain:</span>
                                     <strong>${p.rainfall_mm.toFixed(1)} mm</strong>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <span class="text-muted">Confidence:</span>
-                                    <strong>${p.confidence_pct.toFixed(0)}%</strong>
                                 </div>
                             </div>
                         </div>
@@ -466,15 +508,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 .map(([name, d]) => `${name} (est. ${d.depth_m.toFixed(2)} m)`);
 
             if (highRisk.length > 0) {
-                alertBannerText.innerHTML = `High risk detected in: <strong>${highRisk.join(", ")}</strong>. Monitor local announcements.`;
+                alertBannerText.innerHTML = `High flood risk level detected in: <strong>${highRisk.join(", ")}</strong>. Monitor local announcements.`;
                 alertBanner.classList.remove("d-none");
             } else {
                 alertBanner.classList.add("d-none");
             }
             return;
         }
-
-
 
         const cities = window.APP_CITIES || [];
         const highRiskCities = [];

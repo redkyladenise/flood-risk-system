@@ -4,7 +4,6 @@ Reads manual CSV files and inserts rows into:
   - hotspots
   - evacuation_centers
   - hotlines
-Run once with: python scripts/populate_emergency_data.py
 """
 
 import sys
@@ -74,7 +73,6 @@ with app.app_context():
             name=row["name"],
             barangay=row["barangay"],
             address=row["address"],
-            capacity=int(row["capacity"]),
         )
         db.session.add(ec)
         count += 1
@@ -90,7 +88,14 @@ with app.app_context():
     count = 0
     for _, row in df_hotlines.iterrows():
         scope = str(row["scope"]).strip()
+        # ntl hotlines: city_id = None
         city_id = None if scope.lower() == "national" else city_id_map.get(scope)
+
+        if city_id is None and scope.lower() != "national":
+            print(f"  WARNING: Scope '{scope}' not matched — treating as national.")
+
+        sim_val = row.get("sim")
+        sim = str(sim_val).strip() if pd.notna(sim_val) and str(sim_val).strip() else None
 
         h = Hotline(
             city_id=city_id,
@@ -98,6 +103,7 @@ with app.app_context():
             type=row["type"],
             service=row["service"],
             number=str(row["number"]),
+            sim=sim,
         )
         db.session.add(h)
         count += 1

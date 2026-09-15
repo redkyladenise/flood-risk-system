@@ -1,26 +1,559 @@
-city_name,district,name,barangay,address,capacity
-Quezon City,0,Quezon City Hall Grounds,Diliman,Elliptical Rd,2000
-Quezon City,0,Cubao Araneta Coliseum Area,Cubao,Gen. Romulo Ave,1500
-Quezon City,0,Batasan Hills National High School,Batasan Hills,Batasan Hills,800
-Quezon City,0,Commonwealth Elementary School,Commonwealth,Commonwealth Ave,600
-Quezon City,0,San Bartolome High School,San Bartolome,San Bartolome,600
-Quezon City,0,Quezon City Hall Evacuation Center,Central,Quezon City Hall Complex,500
-Quezon City,0,Payatas Elementary School,Payatas,Payatas,500
-Manila,0,Rizal Memorial Sports Complex,Malate,Pablo Ocampo Sr. St.,5000
-Manila,0,Tondo High School,Tondo,Tondo,700
-Manila,0,Sampaloc Elementary School,Sampaloc,Sampaloc,600
-Manila,0,Paco Elementary School,Paco,Paco,500
-Manila,0,Pandacan Elementary School,Pandacan,Pandacan,500
-Marikina,0,Parang National High School,Parang,Parang,700
-Marikina,0,Sta. Elena Elementary School,Santa Elena,Sta. Elena,600
-Marikina,0,Nangka Elementary School,Nangka,Nangka,500
-Marikina,0,Tumana Covered Court,Tumana,Tumana,400
-Marikina,0,Marikina Sports Center,Concepcion Uno,Shoe Ave,3000
-Marikina,0,Marikina Sports Center,Marikina Heights,Marikina Sports Center,1000
-Marikina,0,Marikina City Hall Gym,Concepcion Uno,J.P. Rizal St.,800
-Marikina,0,Parang National High School,Parang,Parang,700
-Pasig,0,Pasig City Sports Center,Pinagbuhatan,F. Legaspi St.,1500
-Pasig,0,Pasig City Hall Grounds,Bagong Ilog,Caruncho Ave,1000
-Pasig,0,Ugong National High School,Ugong,Ugong,600
-Pasig,0,Napindan Elementary School,Napindan,Napindan,400
-Pasig,0,Palatiw Elementary School,Palatiw,Palatiw,400
+city_name,district,name,barangay,address
+Manila,1,Delpan Sports Complex,20,"Delpan St, San Nicolas"
+Manila,1,Rosauro Almario Elementary School,32,"1012 Kagitingan St, Tondo"
+Manila,1,Antonio Villegas High School,100,"Roxas St, Tondo"
+Manila,1,OVP Bldg. 1,101,"Zone 8, Rd 10, Tondo"
+Manila,1,Vicente Lim Elementary School,101,"106 J.P. Rizal St, Tondo"
+Manila,1,Bldg. 18 Covered Court,128,"Zone 10, Tondo"
+Manila,2,Brgy. 200 - Multi-Purpose Hall,200,"Zone 18, Tondo"
+Manila,2,Felipe G. Calderon Integrated School,201,"Hermosa St, Tondo"
+Manila,2,Melchora Aquino Elementary School,204,"Solis St, Tondo"
+Manila,2,Gen. Gregorio Del Pilar Elementary School,259,"Jose Abad Santos St, Tondo"
+Manila,3,Coastal Area,275,"Zone 25, San Nicolas"
+Manila,3,Pedro Guevarra Elementary School,285,"San Fernando St, Bindondo"
+Manila,3,Antonio Regidor Elementary School,330,"Alonzo St, Santa Cruz"
+Manila,3,Francisco Balagtas Elementary School,334,"Alvarez St, Santa Cruz"
+Manila,4,Trinidad Tecson Elementary School,412,"Gen. Geronimo St, Sampaloc"
+Manila,4,Dapitan Sports Complex,520,"Instruccion St, Sampaloc"
+Manila,4,Legarda Elementary School,522,"Craig St, Sampaloc"
+Manila,5,DWO V Office,683,"Sagat St, Paco"
+Manila,5,Epifanio Delos Santos Elementary School,695,"Gen. Malvar St, Malate"
+Manila,5,Aurora A. Quezon Elementary School,703,"San Andres St, Malate"
+Manila,5,Rafael Palma Elementary School,739,"Zobel Roxas St, San Andres"
+Manila,5,Fernando Ma. Guerrero Elementary School,812,"Pedro Gil St, Paco"
+Manila,6,Brgy. 598 - Multi-Purpose Hall,598,"Damka St, Santa Mesa"
+Manila,6,Likha Evacuation Center,598,"San Antonio St, Santa Mesa"
+Manila,6,Don Bosco School,602,"V. Mapa, Santa Mesa"
+Manila,6,Tomas Earnshaw Elementary School,897,"Mayon St, Punta Sta. Ana"
+Manila,BASECO,Hermenegildo J. Atienza Elementary School,649,"Zone 68, Baseco, Port Area"
+Manila,BASECO,Pres. Corazon Aquino Senior High School,649,"Baseco, Port Area"
+Marikina,1,Barangka Elementary School,Barangka,General Julian Cruz St
+Marikina,1,IVS Covered Court,Industrial Valley Complex,38 FVR Rd
+Marikina,1,Leodegario Victorino Elementary School,Jesus Dela Peña,332 A. Bonifacio Ave
+Marikina,1,Jesus Dela Peña NHS,Jesus Dela Peña ,Victorino
+Marikina,1,Kalumpang Elementary School,Kalumpang,Kagitingan
+Marikina,1,Kalumpang National High School,Kalumpang,M.H. Del PIlar St
+Marikina,1,Malanday Elementary School,Malanday,Malaya St
+Marikina,1,Filipinas Gym,Malanday,Visayas St
+Marikina,1,Bulelak Gym,Malanday,Minahan St
+Marikina,1,Sampaquita Gym,Malanday,Sampaguita St
+Marikina,1,San Roque Elementary School,San Roque,Abad Santos
+Marikina,1,San Roque National High School,San Roque,A. Leongson St
+Marikina,1,Marikina Elementary School,Sta. Elena,Florencio Paz
+Marikina,1,Sta. Elena High School,Sta. Elena,W.C. Paz St
+Marikina,1,Sto. Niño Elementary School,Sto. Niño,Guerilla
+Marikina,1,Sto. Niño National High School,Sto. Niño,Agricultores St
+Marikina,1,Tañong High School,Tañong,Lopez Jaena St
+Marikina,2,SSS Village Elementary School,Concepcion Dos,Sapphire St
+Marikina,2,SSS National High School,Concepcion Dos,Sapphire St
+Marikina,2,H. Bautista Elementary School,Concepcion Uno,J.P. Rizal St
+Marikina,2,Concepcion Integrated School ES,Concepcion Uno,J.P. Rizal St
+Marikina,2,Concepcion Integrated School SL,Concepcion Uno,J.P. Rizal St
+Marikina,2,Concepcion Elementary School,Concepcion Uno,J.P. Rizal St
+Marikina,2,PLMar (Greenheights),Concepcion Uno,"Brazil St, Greenheights Subdivision"
+Marikina,2,Marikina High School,Concepcion Uno,E. Santos St
+Marikina,2,Fortune Elementary School,Fortune,Santan St
+Marikina,2,Fortune High School,Fortune,Santan St
+Marikina,2,Kap. Moy Elementary School,Marikina Heights,Champagnat St
+Marikina,2,Marikina Heights High School,Marikina Heights,Champagnat St
+Marikina,2,Nangka Elementary School,Nangka,Balubad St
+Marikina,2,Nangka Gym,Nangka,Balubad St
+Marikina,2,St Mary Elementary School,Nangka,St Mary Subdivision
+Marikina,2,Parang Elementary School,Parang,84 Padre Paterno St
+Marikina,2,Parang High School,Parang,Tandang Sora St
+Pasig,1,B. Tatco Covered Court,Bagong Ilog,42 B. Tatco
+Pasig,1,Bagong Ilog Elementary School,Bagong Ilog,52 A Flores
+Pasig,1,4/F Caniogan Barangay Hall (Roof Deck),Caniogan,Kalinangan St
+Pasig,1,Kalawaan Ismar Covered Court,Kalawaan,"Purok 6, Sampaguita Rd"
+Pasig,1,Kapasigan Sports Center Function Hall,Kapasigan,1D Dr. Pilapil St
+Pasig,1,Malinao Covered Court,Malinao,E. Jacinto St
+Pasig,1,Ugong Barangay Hall Parking Lot,Ugong,154 F. Legaspi St
+Pasig,2,Karangalan Multipurpose Hall,Dela Paz,Kaginhawaan Rd
+Pasig,2,Manggahan Multipurpose Hall,Manggahan,Magsaysay Ave
+Pasig,2,Maybunga Elementary School Annex,Maybunga,Westbank Rd
+Pasig,2,Westbank Community Center,Maybunga,Westbank Rd
+Pasig,2,Stella Maris Covered Court,Maybunga,Stella Maris Main Ave
+Pasig,2,Damayan Covered Court,Pinagbuhatan,Urbano Velasco Ave
+Pasig,2,Bluegrass Multipurpose Hall,Rosario,Bluegrass St
+Pasig,2,Rosario Elementary School,Rosario,Dr. Sixto Antonio Ave
+Pasig,2,San Miguel Multipurpose Hall,San Miguel,Mercedes Ave
+Pasig,2,Sta. Lucia Bliss Multipurpose Hall,Santa Lucia,Jacob St
+Pasig,2,De Castro Elementary School,Santa Lucia,Everlasting St
+Pasig,2,Ilaya Covered Court,Santolan,Evangelista St
+Pasig,2,Our Lady of Perpetual Help School,Santolan,Mejico St
+Pasig,2,Santolan Elementary School,Santolan,Evangelista St
+Pasig,2,Santolan High School,Santolan,San Isidro St
+Pasig,2,Sto. Tomas De Villanueva Parochial School,Santolan,Evangelista St
+Quezon City,1,Alicia Barangay Hall,Alicia,02 Batangas St
+Quezon City,1,Bago Bantay Elementary School Covered Court,Alicia,Fort Santiago Corner
+Quezon City,1,Bagong Pag-asa Barangay Hall,Bagong Pag-asa,"Rd 11, Cor Rd 9 St"
+Quezon City,1,Bahay Toro Basketball Court,Bahay Toro,Rd 11 St
+Quezon City,1,Batabha Basketball Court,Bahay Toro,Rd 19 St
+Quezon City,1,Toro Hills Elementary School,Bahay Toro,Rd 19 & Rd 15 St
+Quezon City,1,Balingasa Basketball Covered Court,Balingasa,Balingasa St
+Quezon City,1,Balingasa Elementary School,Balingasa,Balingasa Rd
+Quezon City,1,Balingasa High School,Balingasa,"J, Aquino St"
+Quezon City,1,Harmony St,Balingasa,Harmony St
+Quezon City,1,Bungad Basketball Covered Court,Bungad,"Barangay Bungad Block 17 St"
+Quezon City,1,Barangay Damar Function Hall,Damar,Damar Loop
+Quezon City,1,Damar Basketball Court,Damar,Damar Loop
+Quezon City,1,Damar Multi-Purpose,Damar,Damar Loop
+Quezon City,1,Damayan Barangay Hall,Damayan,San Vicente St
+Quezon City,1,Parish Social Hall,Damayan,San Pedro Bautista St
+Quezon City,1,Congressman Reynaldo A. Calalay Memorial Elementary School,Damayan,"F, Bautista St"
+Quezon City,1,Dalupan Elementary School,Del Monte,Dalupan Elementary School (Marinduque St)
+Quezon City,1,Del Monte Barangay Hall,Del Monte,Barangay Hall (Osmeña St)
+Quezon City,1,"Del Monte, San Francisco Elementary School",Del Monte,Del Monte Ave.
+Quezon City,1,Barangay Katipunan Youth Center,Katipunan,San Antonio St
+Quezon City,1,Katipunan Barangay Hall,Katipunan,San Antonio St
+Quezon City,1,Katipunan Covered Court,Katipunan,San Antonio St
+Quezon City,1,San Antonio Elementary School,Katipunan,San Antonio St
+Quezon City,1,Lourdes Covered Court,Lourdes,Basketball Covered Court
+Quezon City,1,Lourdes School,Maharlika,N.S Amoranto Ave Apo St
+Quezon City,1,Maharlika Barangay Hall,Maharlika,246 Apo St
+Quezon City,1,Maharlika SK Hall,Maharlika,37 Del monte Ave
+Quezon City,1,Puregold Parking Space,Maharlika,Del Monte corner Kanlaon St
+Quezon City,1,Quincy Supermarket,Maharlika,D. Tuazon near corner N.S Amoranto Ave
+Quezon City,1,Manresa Barangay Hall,Manresa,Makaturing St
+Quezon City,1,Mariblo Barangay Hall,Mariblo,3rd Floor Barangay Hall Mariblo
+Quezon City,1,Mariblo Day care Center,Mariblo,Day Care Center (Bernardo St)
+Quezon City,1,Barangay Masambong Tennis Covered Court,Masambong,Malac St
+Quezon City,1,Masambong Community Center Parking Area,Masambong,Malac St
+Quezon City,1,"Masambong, Barangay Multi-purpose (Gazebo Hall)",Masambong,Malac St
+Quezon City,1,E. Rodriguez High School,N.S Amoranto,Angelo St
+Quezon City,1,Malaya Basketball Court,N.S Amoranto,Malaya St
+Quezon City,1,Malaya Tennis Court,N.S Amoranto,Malaya St
+Quezon City,1,Nayong Kanluran Barangay Hall,Nayong Kanluran,Sorsogon St
+Quezon City,1,Nayong Kanluran Basketball Court,Nayong Kanluran,Zamboanga St
+Quezon City,1,Nayong Kanluran Cancio Park,Nayong Kanluran,Sulu St
+Quezon City,1,"Paang Bundok, Barangay Hall Paang Bundok",Paang Bundok,166 Iriga St Laloma
+Quezon City,1,"Paang Bundok,Open Space",Paang Bundok,Along Calavite St cor. A. Bonifacio St
+Quezon City,1,Pag-ibig sa Nayon Barangay Hall,Pag-ibig sa Nayon,"Barangay Hall of Pag ibig sa Nayon, Pineda St"
+Quezon City,1,Paltok Barangay Hall,Paltok,Basa St cor. Mendoza St
+Quezon City,1,Paltok Bayanihan Elementary School,Paltok,Mendoza St
+Quezon City,1,Paltok Covered Court,Paltok,1 Mendoza St
+Quezon City,1,Paltok Elementary School,Paltok,Mendoza St
+Quezon City,1,"Paraiso, Residential House",Paraiso,"15 EaSt, Riverside St"
+Quezon City,1,Phil-am Football Field,Phil-Am,Phil-am Football Field
+Quezon City,1,Phil-am Tennis Court,Phil-Am,Phil-am Tennis Court
+Quezon City,1,Project 6 Elementary School,Project 6,Rd 7 St
+Quezon City,1,Project 6 Multi-Purpose Hall – 3rd Floor,Project 6,Rd 2 St
+Quezon City,1,Project 6 Park,Project 6,Rd 2 St
+Quezon City,1,Project 6 Veterans Covred court,Project 6,Rd 7 St
+Quezon City,1,Ramon Magsaysay Bago Bantay Elementary School,Ramon Magsaysay,Bukidnon St cor. Fort Santiago St
+Quezon City,1,"Ramon Magsaysay, Multi-purpose Building Brgy Hall",Ramon Magsaysay,Ilocos St cor. Cagayan St
+Quezon City,1,Salvacion Barangay Hall,Salvacion,"72 Bulusan St, Barangay Hall"
+Quezon City,1,Barangay San Jose Covered Court,San Antonio,San Jose St
+Quezon City,1,San Antonio Day Care Center (2) Sto. Niño (Guerero),San Antonio,San Jose St
+Quezon City,1,San Jose De Padua Parish Church,San Antonio,27 Capillan St
+Quezon City,1,Sinag Tala Elementary School,San Antonio,27 Capillan St
+Quezon City,1,Vasra Multi-Purpose Hall,Vasra,Forestry St
+Quezon City,1,Esteban Abada Elementary School,Veterans Village,Palomaria St
+Quezon City,1,Veterans Village Basketball Covered court,Veterans Village,Calumpit St
+Quezon City,1,Veterans Village BVV Function Hall,Veterans Village,BVV Function Hall
+Quezon City,1,Veterans Village BVV Multi-purpose Hall,Veterans Village,BVV Multi-purpose Hall
+Quezon City,1,"WeSt, Triangle Barangay Covered Court","WeSt, Triangle",Daily Mirror St
+Quezon City,1,"WeSt, Triangle Multi-purpose Hall","WeSt, Triangle",Daily Mirror St
+Quezon City,1,"WeSt, Triangle Open Space former JASMS compound","WeSt, Triangle",Daily Mirror St
+Quezon City,2,Bagong Silangan Elementary School,Bagong Silangan,Gen. Villamor St
+Quezon City,2,Bagong Silangan Evacuation Center,Bagong Silangan,Gen. Geronimo
+Quezon City,2,Bagong Silangan High School,Bagong Silangan,Gen. Villamor St
+Quezon City,2,"Bagong Silangan, BONA HOA Covered court",Bagong Silangan,Bonifacio Extension BONA HOA
+Quezon City,2,"Bagong Silangan, Brookside Liban Covered Court",Bagong Silangan,Brooksire Gawad kalasag
+Quezon City,2,"Bagong Silangan, Covenant Village Covered Court",Bagong Silangan,Covenant Village / Santolan
+Quezon City,2,"Bagong Silangan, SB Covered Court area",Bagong Silangan,"5 Sitio Veterans"
+Quezon City,2,"Bagong Silangan, SIPNA Covered Court",Bagong Silangan,SIPNA Compound / Manalon St
+Quezon City,2,"Bagong Silangan, SMB HOA Covered Court",Bagong Silangan,Rd 5 Area C. Sitio Kumunoy
+Quezon City,2,"Bagong Silangan, Sulyap ng Pag-asa Covered court",Bagong Silangan,Bonifacio Extension in front of BONA HOA
+Quezon City,2,"Bagong Silangan, Sumama-ka-Compound Covered Court",Bagong Silangan,Sumama-ka-Compound Covered Court
+Quezon City,2,"Bagong Sillangan, NASKI Covered court",Bagong Silangan,Bonifacio cor. J.P Rizal St
+Quezon City,2,Batasan Hills – Saret St Basketball court,Batasan Hills,Saret St Basketball court Beside a Brgy Hall
+Quezon City,2,Batasan Hills Barangay Hall,Batasan Hills,Barangay Hall Batasan Rd
+Quezon City,2,Batasan Hills National High School,Batasan Hills,Batasan Hills National High School
+Quezon City,2,"Batasan Hills, Consti Area Basketball Court",Batasan Hills,"Consti Area Basketball Court, Congressional Rd"
+Quezon City,2,"Batasan Hills, Freedom Park Basketball Court",Batasan Hills,Freedom Park Basketball Court
+Quezon City,2,"Batasan Hills, Ilang-ilang Area Basketball Court",Batasan Hills,Ilang-ilang Area Basketball Court
+Quezon City,2,"Batasan Hills, Kalayaan B Basketball Court",Batasan Hills,Kalayaan B Basketball Court
+Quezon City,2,"Batasan Hills, Sitio Bukal Basketball Court",Batasan Hills,Sitio Bukal Basketball Court
+Quezon City,2,"Batasan Hills, Sitio Taniman Basketball Court",Batasan Hills,Stio Taniman Basketball Court / Morado St
+Quezon City,2,"Batasan Hills, Talanay Area Basketball Court",Batasan Hills,Talanay Area Basketball Court Kagawad Rd
+Quezon City,2,Pangasinan- St Luzviminda Basketball Court,Batasan Hills,Pangasinan St Luzviminda Basketball Court
+Quezon City,2,Pres. Corazon C. Aquino Elementary School,Batasan Hills,Along Batasan Rd
+Quezon City,2,San Diego Elementary School,Batasan Hills,San Diego Elementary School Masbate St
+Quezon City,2,"Commonwealth, Adarna Covered Court",Commonwealth,Adarna Covered Court Adarna St
+Quezon City,2,"Commonwealth, Kasunduan Covered Court",Commonwealth,Kasunduan Covered Court Kasunduan St
+Quezon City,2,"Commonwealth, Kaunlaran Covered Court",Commonwealth,Kaunlaran Covered Court Kaunlaran St
+Quezon City,2,"Commonwealth, MRB Covered Court",Commonwealth,MRB Covered Court
+Quezon City,2,"Commonwealth, Purok 20 Covered Court",Commonwealth,Purok 20 Covered Court
+Quezon City,2,"Commonwealth, Soliven Covered Court",Commonwealth,Soliven Covered Court Soliven St
+Quezon City,2,"Commonwealth, St Joseph Covered",Commonwealth,St Joseph Covered Poinsettia
+Quezon City,2,Holy Spirit Covered Court,Holy Spirit,Covered Court Front of Barangay Hall
+Quezon City,2,Holy Spirit Gilarmi Covered Court,Holy Spirit,Sta. Catalina St
+Quezon City,2,Holy Spirit Gulayan ng Bulaklakan (Urban Farm) Multi – Purpose Hall,Holy Spirit,Multi-Purpose Building
+Quezon City,2,Holy Spirit MCRF Building,Holy Spirit,Fautisno
+Quezon City,2,Holy Spirit Sto. Niño Covered Court,Holy Spirit,Sto. Niño St / Republic Ave
+Quezon City,2,"Holy Spirit, LRB Covered Court",Holy Spirit,LRB Covered Court
+Quezon City,2,"Payatas, Atis Covered Court",Payatas,Lower Atis St
+Quezon City,2,"Payatas, Banahaw Covered Court",Payatas,Banahaw St
+Quezon City,2,"Payatas, Bicol Mortuary",Payatas,Bicol St
+Quezon City,2,"Payatas, Bistek Ville Covered Court",Payatas,Bistekville
+Quezon City,2,"Payatas, Bulacan Covered Court",Payatas,Bulacan St
+Quezon City,2,"Payatas, Ilang- ilang Covered Court",Payatas,Ilang – ilang St
+Quezon City,2,"Payatas, Lower Jasmin Covered Court",Payatas,Jasmin St
+Quezon City,2,"Payatas, Narra Covered Court",Payatas,Phase 2 Covered Court St
+Quezon City,2,"Payatas, Phase 2 Multi-Purpose Hall",Payatas,Molave St
+Quezon City,2,"Payatas, Phase 4 Covered Court",Payatas,Clemente St
+Quezon City,2,"Payatas, Talisay Covered Court",Payatas,Morning Star St
+Quezon City,2,"Quirino 3-B, Multi-purpose Hall",Payatas,"20 Almon St Project 3, Quezon City"
+Quezon City,3,Amihan Day Care Center,Amihan,Amihan Day Care Center Palosapis St
+Quezon City,3,Batino SPED Elementary School,Amihan,Batino SPED Elementary School Batino St
+Quezon City,3,"Church of ChriSt, Tutorial Center",Amihan,"Church of ChriSt, Tutorial Center Palosapis St"
+Quezon City,3,Bagumbayan Covered Court,Bagumbayan,Covered Court San Roque St
+Quezon City,3,Bagumbayan Elementary School,Bagumbayan,Bagumbayan elementary school San Roque St
+Quezon City,3,Bagumbayan Senior Citizens Hall,Bagumbayan,Senior Citizens Hall San Roque St
+Quezon City,3,Manggahan Fire Station,Bagumbayan,Manggahan Fire Station Manggahan St
+Quezon City,3,Bagumbuhay Barangay Hall / Basketball Covered Court,Bagumbuhay,Miguel Malvar St
+Quezon City,3,Kalantiaw Elementary School,Bagumbuhay,Miguel Malvar St
+Quezon City,3,Bayanihan Barangay Hall,Bayanihan,"P. Martinez St, Barangay Hall"
+Quezon City,3,Camp Aguinaldo Parade Ground,Bayanihan,Camp Aguinaldo Parade Ground (De Jesus Ave. )
+Quezon City,3,Blue Ridge A Parking Area front of Barangay Hall,Blue ridge A,Parking Area front of Barangay Hall (Cliff Dr)
+Quezon City,3,Blue Ridge A Tennis Court & Basketball Court,Blue ridge A,Tennis Court & Basketball Court (Cliff Dr)
+Quezon City,3,Blue Ridge B Barangay Hall,Blue ridge B,Barangay Hall (Moonlight Loop)
+Quezon City,3,Camp Aguinaldo Open Space,Camp Aguinaldo,De Jesus Ave
+Quezon City,3,Dioquino Zobel Barangay Hall Mini Stage,Dioquino Zobel,Barangay Dioquino Zobel
+Quezon City,3,Duyan-duyan Covered Court,Duyan – Duyan,Kamagong St
+Quezon City,3,Project 3 Elementary School,Duyan – Duyan,Molave St
+Quezon City,3,Quirino High School,Duyan – Duyan,Molave St
+Quezon City,3,Cubao Elementary School,E. Rodriguez,Cubao Elementary School Aurora Blvd
+Quezon City,3,E. Rodriguez Barangay Hall,E. Rodriguez,"Barangay Hall, Ermin Garcia St"
+Quezon City,3,"E. Rodriguez, Jesus is Lord Church, Oxford St",E. Rodriguez,"Jesus is Lord Church, Oxford St"
+Quezon City,3,"E. Rodriguez, Stella Maris College, Day care Center",E. Rodriguez,"Stella Maris College, Day care Center, Cambridge St"
+Quezon City,3,Nativity of our Lord Parish Church,E. Rodriguez,"Nativity of our lord parish church, Ermin Garcia St"
+Quezon City,3,"EaSt, Kamias BarangayHall – 2nd and 3rd Floor","EaSt, Kamias",K-10th St
+Quezon City,3,"EaSt, Kamias Multi-Purpose Hall","EaSt, Kamias",K-J St
+Quezon City,3,"EaSt, Kamias SK Hall – 2nd Floor","EaSt, Kamias",K-J St
+Quezon City,3,"EaSt, Kamias, Day Care Multi-Purpose Hall","EaSt, Kamias",K-10th St
+Quezon City,3,"In front EaSt, Kamias Barangay Hall","EaSt, Kamias",K-10th St
+Quezon City,3,Escopa I Chapel,Escopa I,Chapel Escopa I Rd
+Quezon City,3,Escopa I Mini-Court,Escopa I,P. Burgos St
+Quezon City,3,"Escopa II, Camp Emilio Aguinaldo",Escopa II,De Jesus Ave.
+Quezon City,3,Escopa III NVRC,Escopa III,P.Burgos St (NVRC)
+Quezon City,3,Escopa IV Barangay Hall,Escopa IV,Barangay Hall / Mapagmahal St
+Quezon City,3,Escipa IV Basketball Covered Court proper,Escopa IV,"Mapagmahal St, / Proper"
+Quezon City,3,Libis Barangay Hall,Libis,Barangay Hall
+Quezon City,3,Libis Basketball Covered Court,Libis,Basketball covered court
+Quezon City,3,Libis Day Care Center,Libis,Barangay Hall
+Quezon City,3,Libis Elementary School,Libis,C5 Rd
+Quezon City,3,Libis Multi-purpose Hall,Libis,Barangay Hall
+Quezon City,3,Libis Parking Area,Libis,Front of barangay Hall
+Quezon City,3,"Libis, Gazebo (Senior Hall)",Libis,Barangay Hall
+Quezon City,3,"Loyola Heights, Alta Vista",Loyola Heights,Alta Vista
+Quezon City,3,"Loyola Heights, Daan Tubo",Loyola Heights,Daang Tubo St
+Quezon City,3,"Loyola Heights, Jocson Meralco Line",Loyola Heights,Jocson Meralco Line
+Quezon City,3,"Loyola Heights, Mary town",Loyola Heights,Mary Town
+Quezon City,3,"Loyola Heights, Park-7",Loyola Heights,Park-7
+Quezon City,3,"Loyola Heights, Ronas Garden",Loyola Heights,Ronas Garden
+Quezon City,3,"Loyola Heights, Varsity Hills",Loyola Heights,Varsity Hills
+Quezon City,3,"Loyola Heights, Villa Aurora",Loyola Heights,Villa Aurora
+Quezon City,3,"Loyola Heights, Xavierville I",Loyola Heights,Xavierville I
+Quezon City,3,"Loyola Heights, Xavierville II",Loyola Heights,Xavierville II
+Quezon City,3,"Loyola Heights, Xavierville III",Loyola Heights,Xavierville III
+Quezon City,3,"Mangga, Day care Center",Mangga,Brgy Mangga St
+Quezon City,3,"Mangga, Garden Open Court",Mangga,Brgy Mangga St
+Quezon City,3,"Mangga, Technological Institute of the Philippines",Mangga,Aurora Boulevard
+Quezon City,3,"Marilag, Plaza",Marilag,Plaza Marilag (Camerino St)
+Quezon City,3,Marilag. T. Alonzo Elementary Shool,Marilag,T. Alonzo Elementary School (A. De Legaspi St)
+Quezon City,3,Masagana Barangay Hall,Masagana,Barangay Hall
+Quezon City,3,Masagana Basketball Covered court,Masagana,Front of Barangay Hall
+Quezon City,3,Masagana Basketball Open Court,Masagana,Beside a Covered court
+Quezon City,3,"Matandang Balara, Mafran Covered court",Matandang Balara,Mafran Covered court (Kalye Dos)
+Quezon City,3,"Matandang Balara, Namalu Open Field",Matandang Balara,Namalu Open Field
+Quezon City,3,"Matandang Balara, Old Balara Elementary School",Matandang Balara,Old Balara Elementary school
+Quezon City,3,"Matandang Balara, Talipapa Covered Court",Matandang Balara,Feria Community
+Quezon City,3,"Matandang Balara, Tandang Sora Covered Court",Matandang Balara,Old Balara Basketball Court
+Quezon City,3,"Milagrosa, 5k Covered court",Milagrosa,Milagrosa Park Basketball Covered Court
+Quezon City,3,"Milagrosa, Project 4 Open Space",Milagrosa,Milagrosa Park
+Quezon City,3,Pansol Proper covered and open court,Pansol,Pansol Proper covered and open court
+Quezon City,3,"Pansol, Balara Filter’s Parks and Play Grounds",Pansol,Balara Filter’s Parks and Play Grounds
+Quezon City,3,"Pansol, Kaingin I Covered and Open Courts",Pansol,Kaingin I Covered and Open Courts
+Quezon City,3,"Pansol, Kaingin II Covered court and Open Courts",Pansol,Kaingin II Covered court and Open Courts
+Quezon City,3,Pansol. Barangay Hall Complex located at Plaza St,Pansol,Barangay Hall Complex located at Plaza St
+Quezon City,3,Quirino 3-A Barangay Hall,Quirino 3-a,36-A PajoQuezon City1102 Metro Manila
+Quezon City,3,Quirino 3-A Molave St,Quirino 3-a,Molave St
+Quezon City,3,Quirino 3-B Covered Basketball Court,Quirino 3-B,"Akle Park and Play ground, Akle St Project 3, QC"
+Quezon City,3,Quirino 3-B Multi-purpose Hall,Quirino 3-B,"20 Almon St Project 3, Quezon City"
+Quezon City,3,Quirino 2-A Barangay Hall,Quirino 2A,Kubili St & Chico St
+Quezon City,3,"Quirino 2-B, Barangay Multi-purpose Hall",Quirino 2-B,Pajo St
+Quezon City,3,Quirino High School & Elementary School,Quirino 2-B,Molave St
+Quezon City,3,"Quirino 2C, Open Space",Quirino 2-C,Siniguelas St Guyabano St
+Quezon City,3,St Ignatius Barangay Social Hall,Saint Ignatius,Riviera St
+Quezon City,3,St Ignatius Basketball Covered court,Saint Ignatius,Riviera St
+Quezon City,3,St Ignatius Community Center,Saint Ignatius,Riviera St
+Quezon City,3,St Ignatius Empty lot (3rd cor fordham),Saint Ignatius,Fordham St
+Quezon City,3,"St Ignatius, Promenade A",Saint Ignatius,Riviera St
+Quezon City,3,San Roque Brgy Hall (3rd Floor),San Roque,85 19th Ave
+Quezon City,3,"San Roque, Aguinaldo Elementary School (Covered Court)",San Roque,18th Ave
+Quezon City,3,Silangan Barangay Hall,Silangan,Silangan Barangay Hall (Ermin Garcia St)
+Quezon City,3,Silangan Friendship Covered Court,Silangan,Friendship Covered Court Ermin Garcia St
+Quezon City,3,15th Ave Elementary SchoolBasketball Covered Court,Socorro,15th Ave
+Quezon City,3,Camp Aguinaldo,Socorro,Bonny Serrano Ave
+Quezon City,3,SM Cubao Parking,Socorro,Gen. McArthur Ave cor. Gen. Aguinaldo Ave
+Quezon City,3,Tagumpay Proper Area,Tagumpay,309 P. Tuazon Blvd
+Quezon City,3,Ugong Norte Arcadia Ave,Ugong Norte,"131, 134, 138, 161, and 104 Arcadia Ave"
+Quezon City,3,Ugong Norte D.V Rufino corner Don Vicente Ave,Ugong Norte,D.V Rufino corner Don Vicente Ave
+Quezon City,3,Ugong Norte David St Gate 3 Madrigal St,Ugong Norte,David St Gate 3 Madrigal St
+Quezon City,3,Ugong Norte Eclave and Ivory Court,Ugong Norte,"Christ, the King Parish Church Open Parking Lot"
+Quezon City,3,Ugong Norte Football Field,Ugong Norte,Corinthian Gardens Park
+Quezon City,3,Ugong Norte Hechanova corner Francisco St vacant lot,Ugong Norte,"Hechanova corner Francisco St, Vacant Lot"
+Quezon City,3,Ugong Norte Luna Park,Ugong Norte,Luna Park
+Quezon City,3,Ugong Norte Madrigal Park,Ugong Norte,Madrigal Park
+Quezon City,3,Ugong Norte Open parking lot,Ugong Norte,The Clubhouse
+Quezon City,3,Ugong Norte Park,Ugong Norte,Tabuena
+Quezon City,3,Ugong Norte Vacant Lot,Ugong Norte,Swallow Drive
+Quezon City,3,Ugong Norte Vacant Lot,Ugong Norte,Heron St
+Quezon City,3,Ugong Norte Vacant Lot,Ugong Norte,Sparrow St
+Quezon City,3,Ugong Norte Vacant Lot,Ugong Norte,Woodpecker corner Swan St
+Quezon City,3,Ugong Norte Vacant Lot,Ugong Norte,"Flicker St, corner swallow drive"
+Quezon City,3,Ugong Norte Vacant Lot,Ugong Norte,"Flamingo St, corner Hornbill St"
+Quezon City,3,Ugong Norte Vacant Lot,Ugong Norte,Flamingo St
+Quezon City,3,Ugong Norte Vacant Lot,Ugong Norte,Swallow Drive
+Quezon City,3,Ugong Norte Vacant Lot,Ugong Norte,Temple Drive
+Quezon City,3,Ugong Norte Vacant Lot,Ugong Norte,Front of Barangay Ugong Norte
+Quezon City,3,"Ugong Norte, Castrillo St Gate 3 Vacant Lot",Ugong Norte,Castrillo St Gate 3 Vacant Lot
+Quezon City,3,"Ugong Norte, Paterno Circle Park",Ugong Norte,Paterno Circle Park
+Quezon City,3,"J. Bracken Covered Court and Multi-purpose Hall",Villa Maria Clara,J. Bracken St
+Quezon City,3,P. Pelaez Multi-Purpose hall,Villa Maria Clara,P. Pelaez St
+Quezon City,3,Pelaez Park,Villa Maria Clara,P. Pelaez St
+Quezon City,3,Villa Maria Clara Barangay Hall,Villa Maria Clara,Alimudin Extension St
+Quezon City,3,Villa Maria Clara Material Recovery Facility,Villa Maria Clara,Alimudin Extension St
+Quezon City,3,Villa Maria Clara Senior Citizens Hall,Villa Maria Clara,Alimudin Extension St
+Quezon City,3,Holy Family Parish Formation Center,"West, Kamias","K1 St, Holy Family Parish Formation Center"
+Quezon City,3,"West, Kamias Covered Walk","West, Kamias","K10th St, Covered Walk"
+Quezon City,3,White Plains Sports and Fitness Center (WPSFC),White Plains,Goldstar St
+Quezon City,3,White Plains Tennis Court,White Plains,Goldstar St
+Quezon City,4,"Bagong Lipunan ng Crame, Bagong Barrio Half Court",Bagong Lipunan ng Crame,Bagong Barrio
+Quezon City,4,"Bagong Lipunan ng Crame, First, Ave court",Bagong Lipunan ng Crame,"FirSt, Ave, 1St, Ave Open Court"
+Quezon City,4,"Bagong Lipunan ng Crame, Manggahan Half Court",Bagong Lipunan ng Crame,Sunrise Drive
+Quezon City,4,Botocan Barangay Hall,Botocan,Makadios Stz- 3rd Floor
+Quezon City,4,Botocan Suntay Multi-Purpose Building,Botocan,"Camp Karingal, Makadios St"
+Quezon City,4,Central Agham Rd (BIR Rd),Central,BIR Rd
+Quezon City,4,Central Kalayaan Service Rd (Kalayaan Ave),Central,Kalayaan Ave
+Quezon City,4,Central Mutlti-purpose Hall,Central,Quezon Ave E. Service Rd
+Quezon City,4,Quezon City Memorial Circle (Eliptical Rd),Central,QMC
+Quezon City,4,"Damayang Lagi, Scalabrini Theology",Damayang Lagi,Scalabrini Theology
+Quezon City,4,"Damayang Lagi, TUA Building",Damayang Lagi,Trinity University of Asia (Covered Court)
+Quezon City,4,"Damayang Lagi,Missionary Society of Saint Paul (MSSP)",Damayang Lagi,Missionary Society of Saint Paul (MSSP)
+Quezon City,4,San Lorenzo Ruiz Formation House,Damayang Lagi,San Lorenzo Ruiz
+Quezon City,4,"Don Manuel, Aurora A. Quezon Elementary School",Don Manuel,Cordillera St
+Quezon City,4,Our Lady of Parish (Diocese of Cubao),Don Manuel,Our Lady of Parish (Diocese of Cubao) / (L.Castillo)
+Quezon City,4,Aurora A Quezon Elementary School,Doña Aurora,Cordillera St
+Quezon City,4,Barangay Doña Aurora SB2 Court,Doña Aurora,Jacinto St
+Quezon City,4,Doña Aurora Barangay Hall,Doña Aurora,Luskot St
+Quezon City,4,Doña Aurora Our Lady of Sacred Heart School,Doña Aurora,Bayani St
+Quezon City,4,Doña Imelda Justice Hall,Doña Imelda,Bayani St
+Quezon City,4,Doña Imelda Malangen Hall,Doña Imelda,Bayani St
+Quezon City,4,Doña Imelda Multi Purpose Hall Gymnasium,Doña Imelda,Bayani St
+Quezon City,4,Doña Imelda Suntay Amphitheater,Doña Imelda,Bayani St
+Quezon City,4,Philippines Institute of Quezon City (PIQC),Doña Josefa,"Kitanlad St"
+Quezon City,4,Horseshoe Barangay Hall,Horseshoe,"Sunset Drive"
+Quezon City,4,Horseshoe Juliet Circle Open Space Area,Horseshoe,Julieta Circle
+Quezon City,4,Horseshoe Plaza Court Velasco Compound,Horseshoe,Gilmore Town House
+Quezon City,4,Immaculate Conception Barangay Multi-purpose Hall,Immaculate Conception,Trinidad St
+Quezon City,4,Immaculate Conception Cathedral School,Immaculate Conception,Lantana St
+Quezon City,4,Kalusugan Barangay Hall,Kalusugan,19th St & Sta. Ignacia St
+Quezon City,4,Kalusugan Multi-Purpose Building,Kalusugan,Broadway Ave.
+Quezon City,4,Missionary Saint Andrew Theological,Kalusugan,Trinity Drive
+Quezon City,4,Kamuning Barangay Hall,Kamuning,"K-5th St, behind the kamuning public market"
+Quezon City,4,Kamuning Bernardo Multi-purpose Hall,Kamuning,"K-3rd St, Behind the BJMP"
+Quezon City,4,Kamuning Senior Citizens Building,Kamuning,K-5th St
+Quezon City,4,Kamuning Vicente Hall,Kamuning,K-5th St
+Quezon City,4,Kaunalaran Banahaw,Kaunlaran,"Banahaw St, N. Domingo St"
+Quezon City,4,Kaunlaran Youth Development (Planas),Kaunlaran,Yakap Day care center
+Quezon City,4,Ponciano Bernardo Elementary School,Kaunlaran,P. Bernardo
+Quezon City,4,Kristong Hari Barangay Hall,Kristong Hari,Kalusugan St (Broadway Ave)
+Quezon City,4,Kristong Hari Lagman Building,Kristong Hari,E. Jacinto St
+Quezon City,4,Kristong Hari Rillo Building,Kristong Hari,Kalusugan St (Broadway Ave)
+Quezon City,4,Holy Cross Parish,Krus na Ligas,P. Francisco
+Quezon City,4,Krus na Ligas Amado Baluyot Covered Court,Krus na Ligas,B. Baluyot
+Quezon City,4,Krus na Ligas Community Park,Krus na Ligas,Magiting St
+Quezon City,4,Krus na Ligas Elementary School,Krus na Ligas,P. Francisco
+Quezon City,4,Krus na Ligas Events Place,Krus na Ligas,B. Baluyot
+Quezon City,4,Krus na Ligas Health Center,Krus na Ligas,P. Francisco
+Quezon City,4,Krus na Ligas High School,Krus na Ligas,P. Francisco
+Quezon City,4,Krus na Ligas Multi-Purpose Building,Krus na Ligas,B. Baluyot
+Quezon City,4,Krus na Ligas Sitio Lambak Covered Court,Krus na Ligas,Sitio Lambak
+Quezon City,4,Laging Handa Barangay Basketball Court,Laging Handa,73 Sct. Gandia cor. Sct. Tuason
+Quezon City,4,Laging Handa Barangay Hall – 3rd Floor,Laging Handa,73 Sct. Gandia cor. Sct. Tuason
+Quezon City,4,Laging Handa Barangay Open Stretch,Laging Handa,Sct. Tobias St
+Quezon City,4,Malaya Barangay Hall,Malaya,Matahimik St
+Quezon City,4,Malaya Basketball Covered Court,Malaya,Matahimik St
+Quezon City,4,Malaya Elementary School,Malaya,Matahimik School
+Quezon City,4,Mary Hill School of Theology,Mariana,Bayani Rd corner Gilmore Ave
+Quezon City,4,National Shrine of Our Lady of Mount Carmel,Mariana,Victoria Ave corner. 5th St
+Quezon City,4,Don Alejandro Roces Science High School,Obrero,Don A Roces Ave
+Quezon City,4,Obrero Function Hall,Obrero,T. Morato cor Parkway St
+Quezon City,4,Old Capitol Site Barangay Gym / Covered Court,Old Capitol Site,Barangay Gym / Covered Court
+Quezon City,4,Old Capitol Site Barangay Hall,Old Capitol Site,Esquinita St
+Quezon City,4,Old Capitol Site Barangay Hall Annex,Old Capitol Site,Esquinita St
+Quezon City,4,Old Capitol Site Rillo Multi – purpose Hall,Old Capitol Site,Esquinita St
+Quezon City,4,Manuel Roxas High School,Paligsahan,Sct. Chuatoco St
+Quezon City,4,Amoranto Sports Complex,Pinagkaisahan,Sct. Chuatoco St
+Quezon City,4,Pinyahan Elementary School,Pinyahan,Mabilis St
+Quezon City,4,Pinyahan Suntay Multi – Purpose Hall Building,Pinyahan,Barangay Hall Multi-purpose halll
+Quezon City,4,General Roxas Elementary SchoolCovered Court,Roxas,Jasmin St
+Quezon City,4,Holy Family Parish Church,Roxas,Padre Silva St
+Quezon City,4,Roxas Multi Purpose Gymnasium,Roxas,Champaca St
+Quezon City,4,Kamuning Elementary School,Sacred Heart,Scout torillo St
+Quezon City,4,"Sacred Heart, Church",Sacred Heart,Sacred Heart Parish – Shrine
+Quezon City,4,San Isidro Galas Badminton Court,San Isidro Galas,Unang Hakbang St
+Quezon City,4,San Isidro Galas Basketball Court,San Isidro Galas,Unang Hakbang St
+Quezon City,4,San Isidro Galas Tennis Court,San Isidro Galas,Unang Hakbang St
+Quezon City,4,San Martin De Porres Open Spaces (A. Banahaw & Edsa Terminal),San Martin de porres,Edsa Terminal
+Quezon City,4,"San Martin de Porres, Barangay Hall & Basketball Covered Court",San Martin de porres,Mecca Aly
+Quezon City,4,"San Martin De Porres, Open Spaces (C. Parking Area 2 Banahaw St)",San Martin de porres,Mayor Ignacio Santos Diaz St
+Quezon City,4,"San Martin De Porres, Open Spaces (B. Mataba St)",San Martin de porres,Mataba St
+Quezon City,4,"San Martin De Porres, Open Spaces (D. Edsa Cor. P. Tuazon Blvd)",San Martin de porres,P. Tuazon Blvd
+Quezon City,4,San Vicente Covered Basketball Court,San Vicente,Maayusin St
+Quezon City,4,San Vicente Suntay Hall,San Vicente,Maayusin St
+Quezon City,4,Santol Barangay Hall,Santol,Baloy Silencio St
+Quezon City,4,"Sikatuna Village, 1St, Quadrant",Sikatuna Village,Maamo St
+Quezon City,4,"Sikatuna Village, 2nd Quadrant",Sikatuna Village,Manining St
+Quezon City,4,"Sikatuna Village, 3rd Quadrant",Sikatuna Village,Malihim St
+Quezon City,4,"Sikatuna Village, 4th Quadrant",Sikatuna Village,Maginhawa St
+Quezon City,4,South Triangle Barangay Hall,South Triangle,Sct. Bayoran St
+Quezon City,4,Sto. Nino Barangay Hall,Sto. Niño,San Isidro St
+Quezon City,4,Tatalon JFYC Covered Basketball Court,Tatalon,Tagupo St
+Quezon City,4,Tatalon Victory Covered Court,Tatalon,Along Victory Ave
+Quezon City,4,"Teachers Village East, Barangay Hall / Covered Court",Teachers Village East,Maginhawa St
+Quezon City,4,Claret School of Quezon City,Teachers Village West,Mahinhin St
+Quezon City,4,U.P Village Basketball Court,U.P Village,Mapayapa St
+Quezon City,4,U.P. Village Tennis Court,U.P Village,Mapayapa St
+Quezon City,4,UP Campus Amorsolo Building,UP Campus,C.V. Francisco St
+Quezon City,4,UP Campus Dagohoy Hall,UP Campus,Dagohoy St
+Quezon City,4,UP Campus Village B Covered Court,UP Campus,Village B St
+Quezon City,4,Valencia Barangay Hall,Valencia,86 B Col.Bonny Serrano Ave
+Quezon City,4,Valencia Multi – purpose Hall,Valencia,Bonny Serano Ave (Multi-purpose Hall)
+Quezon City,5,Bagbag Elementary School,Bagbag,Franco St
+Quezon City,5,Bagbag Remarville Covered Court (Old & New),Bagbag,Capricorn St
+Quezon City,5,Bagbag SP Park – Kingspoint Subd.,Bagbag,King George St
+Quezon City,5,Goodwill Elementary School,Bagbag,"Moses St, & Capricorn Ave."
+Quezon City,5,Capri Activity Center (CaC),Capri,Narra St Area-3
+Quezon City,5,Capri Multi purpose Bldg 2nd Floor,Capri,Sampaguita St Cor Langka St
+Quezon City,5,Capri Multi purpose Covered Court 2nd Floor,Capri,Narra St cor Sampaguita St Area -3
+Quezon City,5,Capri Vargas Hall 2 Storey Bldg,Capri,Mangga St Area 4
+Quezon City,5,San Isidro Labrador Parish Chapel,Capri,Ilang -ilang St Area 2
+Quezon City,5,Fairview Basketball Covered court,Fairview,Beside Barangay hall
+Quezon City,5,Fairview Basketball Covered court,Fairview,Bistek ville 6
+Quezon City,5,Fairview Elementary School,Fairview,Fairlane St
+Quezon City,5,Fairview King Kibbal Restaurant,Fairview,Regalado Ave. St
+Quezon City,5,Fairview Sitio Kislap Covered court,Fairview,Pearl St
+Quezon City,5,Fairview Sitio Ruby multi-purpose center,Fairview,Sitio Ruby St
+Quezon City,5,Good Shepherd Cathedral Parish,Fairview,Regalado Ave. St
+Quezon City,5,"The Church of Jesus ChriSt, of Latter-day Saints",Fairview,Regalado Ave. St
+Quezon City,5,Greater Lagro Centennial Park Dulo,Greater Lagro,"Flores De Mayo, Sultan, Tengao, Ascension Ave."
+Quezon City,5,Greater Lagro Covered Basketball Court,Greater Lagro,"Flores De Mayo, Sultan, Tengao, Ascension Ave."
+Quezon City,5,Greater Lagro Covered Basketball Court,Greater Lagro,"Flores De Mayo, Sultan, Tengao, Ascension Ave."
+Quezon City,5,Greater Lagro Covered Tennis Court,Greater Lagro,"Flores De Mayo, Sultan, Tengao, Ascension Ave."
+Quezon City,5,Greater Lagro Covered Tennis Court,Greater Lagro,"Flores De Mayo, Sultan, Tengao, Ascension Ave."
+Quezon City,5,Greater Lagro Hilltop Covered Basketball Court,Greater Lagro,Esperanza St
+Quezon City,5,Greater Lagro Mindanao Ave. Ext. Open Spaces,Greater Lagro,Mindanao Ave ext.
+Quezon City,5,Greater Lagro Open Basketball Court,Greater Lagro,"Flores De Mayo, Sultan, Tengao, Ascension Ave."
+Quezon City,5,Greater Lagro Open Spaces,Greater Lagro,"Flores De Mayo, Sultan, Tengao, Ascension Ave."
+Quezon City,5,Greater Lagro Open Volleyball Court Plaza,Greater Lagro,"Flores De Mayo, Sultan, Tengao, Ascension Ave."
+Quezon City,5,Holy Family Parish (Diocese of Novaliches),Gulod,Villareal St
+Quezon City,5,Jose Maria Panganiban Senior High School,Gulod,Villaflor St
+Quezon City,5,Rosa L. Susano Novaliches Elementary,Gulod,Quirino Highway
+Quezon City,5,Kaligayahan Multi – Purpose Hall,Kaligayahan,Mockingbird St
+Quezon City,5,Kaligayahan Roxas Vargas Hall,Kaligayahan,"4B Penguin St, Novaliches Quezon City"
+Quezon City,5,"Kaligayahan, Zabarte Covered Court",Kaligayahan,Mockingbird St
+Quezon City,5,Nagkaisang Nayon Banahaw St Open Space,Nagkaisang Nayon,Banahaw St
+Quezon City,5,Nagkaisang Nayon Goldmine Basketball Court,Nagkaisang Nayon,San Dionisio St
+Quezon City,5,Nagkaisang Nayon Pasacola Area D. Basketball Covered Court,Nagkaisang Nayon,Queens Ave
+Quezon City,5,Nagkaisang Nayon Robina Covered Court,Nagkaisang Nayon,Robina St
+Quezon City,5,North Fairview Barangay Hall,North Fairview,Sarong Bangui St
+Quezon City,5,North Fairview Elementary School,North Fairview,Avon St
+Quezon City,5,North Fairview High School,North Fairview,Auburn St
+Quezon City,5,North Fairview Milenyo Day care center,North Fairview,Milenyo St
+Quezon City,5,North Fairview UNFHAI Phase 8 Clubhouse and Covered Court,North Fairview,Peso St
+Quezon City,5,Novaliches Proper Barangay Hall,Novaliches Proper,Barangay Novaliches Proper
+Quezon City,5,Novaliches Proper Doña Isaura Covered Court,Novaliches Proper,Doña Isaura Subd
+Quezon City,5,Novaliches Proper Doña Rosario Covered Court,Novaliches Proper,Doña Rosario St
+Quezon City,5,Novaliches Proper SB Plaza,Novaliches Proper,"Buenamar St, Quirino Highway"
+Quezon City,5,Novaliches Proper Visaya’s Residence rooftop,Novaliches Proper,245 Gen Luis St
+Quezon City,5,Maligaya Elementary School Building,Pasong Putik Proper,ilang-ilang St
+Quezon City,5,Maligaya High School Building,Pasong Putik Proper,ilang-ilang St
+Quezon City,5,Pasong Putik Proper Covered Basketball Court,Pasong Putik Proper,Pechayan Covered court ilang-ilang St
+Quezon City,5,San Agustin Fidel Covered Court,San Agustin,T.S Cruz Subdivision
+Quezon City,5,San Agustin Vargas Multi-purpose building (Old Barangay),San Agustin,Old Barangay
+Quezon City,5,Odelco Elementary School,San Bartolome,Ivory & Orange St
+Quezon City,5,San Bartolome California Village,San Bartolome,Katipunan Ave. California Village
+Quezon City,5,San Bartolome Nomar II Covered Court,San Bartolome,Santan St
+Quezon City,5,San Bartolome Odelco Covered Court,San Bartolome,Ivory & Orange St
+Quezon City,5,"San Bartolome, S.M Parking lot Area",San Bartolome,Quirino highway
+Quezon City,5,San Gabriel Elementary School,Sta. Lucia,A. Bonifacio St
+Quezon City,5,Sta. Lucia Barangay Hall rooftop,Sta. Lucia,Barangay hall Sta. lucia
+Quezon City,5,Sta. Lucia Basketball Covered Court,Sta. Lucia,Sta. Lucia Ave.
+Quezon City,5,Sta. Lucia High School,Sta. Lucia,P. Paterno St
+Quezon City,5,Sta. Lucia Multipurpose Hall,Sta. Lucia,Sta. Lucia St
+Quezon City,5,Sta. Lucia Parish,Sta. Lucia,"T. Alonzo St, & J.P Rizal St"
+Quezon City,5,Sta. Monica Idang Daycare,Sta. Monica,Idang St
+Quezon City,5,Sta. Monica Lydia Basketball court,Sta. Monica,Lydia St
+Quezon City,5,Sta. Monica Mayang Pula Multi-purpose hall,Sta. Monica,Orange St
+Quezon City,5,Sta. Monica Sarmiento Daycare,Sta. Monica,Doña Rorie St
+Quezon City,5,"Sta. Monica, Barangay Covered Court",Sta. Monica,Pugong Ginto St
+Quezon City,6,Apolonio Samson Elementary School,Apolonio Samson,Q.Baetong Dr.
+Quezon City,6,Baesa Covered Court Asamba,Baesa,Asamba Covered Court
+Quezon City,6,Baesa Dead End Court,Baesa,Dead End Court
+Quezon City,6,Baesa G.K Multi-purpose Hall,Baesa,G.K Sitio Pajo
+Quezon City,6,Baesa Monotoc Covered Court,Baesa,Marikit St
+Quezon City,6,Baesa Upper Pajo Open Basketball Court,Baesa,F. Carlos St
+Quezon City,6,Lucas R. Pascual Memorial Elementary School,Baesa,Pascual Rd
+Quezon City,6,Saint Martin De Porres Chapel,Baesa,Sitio Mendez
+Quezon City,6,Bagong-bato Barangay Hall,Balong-bato,Maximina St
+Quezon City,6,Balong-bato Leland Drive Covered Court,Balong-bato,Sab beda College
+Quezon City,6,Balumbato Elementary School,Balong-bato,S. Gonzales Dr
+Quezon City,6,Culiat High School,Culiat,Tandang Sora Ave.
+Quezon City,6,Culiat Multi-Purpose Hall Casanova,Culiat,Casanova Dr Ext.
+Quezon City,6,"Culiat, Forestry Covered Court",Culiat,Cenacle Drive
+Quezon City,6,"Culiat, Luzon Satellite Covered Court",Culiat,Purok 4 Luzon Satellite
+Quezon City,6,"Culiat, Purok 4B Covered Court",Culiat,Purok 4B
+Quezon City,6,"Culiat, San Lorenzo Formation Center",Culiat,Opal St
+Quezon City,6,"Culiat, Sanville Multi-Purpose Hall",Culiat,Cenacle Drive
+Quezon City,6,"Culiat, Vargas Covered Court",Culiat,Vargas LN
+Quezon City,6,New Era Disaster Building,New Era,"St Joseph St, Beside a Barangay Hall"
+Quezon City,6,New Era MRF Building,New Era,"St Joseph St, Beside a Barangay Hall"
+Quezon City,6,Pasong Tamo Pingkian III Covered Court,Pasong Tamo,Lily St
+Quezon City,6,Pasong Tamo Barangay Hall Annex II,Pasong Tamo,Freedom Ave
+Quezon City,6,Pasong Tamo Elementary School,Pasong Tamo,Tandang Sora Ave.
+Quezon City,6,Pasong Tamo Marcel Covered Court,Pasong Tamo,Marcel Village
+Quezon City,6,Pasong Tamo SK Hall Covered Court,Pasong Tamo,Freedom Ave
+Quezon City,6,GSIS Village Elementary School,Sangandaan,Premium St
+Quezon City,6,Ismael Mathay Sr. High School,Sangandaan,Branches St
+Quezon City,6,Mendoza Multi-Level Building,Sangandaan,Branches St
+Quezon City,6,Greenville Covered Court,Sauyo,Greenville St
+Quezon City,6,Sauyo Area 5A Day Care Center,Sauyo,Pascual Rd
+Quezon City,6,Sauyo Area 6A Day Care Center,Sauyo,Primula St
+Quezon City,6,Sauyo Baluyot Covered Court,Sauyo,Gold Star St
+Quezon City,6,Sauyo Baluyot Day Care Center,Sauyo,Gold Star St
+Quezon City,6,Sauyo Del Nacia Covered Court,Sauyo,Daisy St
+Quezon City,6,Sauyo Elementary School,Sauyo,Fuschia St
+Quezon City,6,Sauyo Greenview Royale Covered Court,Sauyo,Green valley St
+Quezon City,6,Sauyo High School,Sauyo,Pantabangan St
+Quezon City,6,Sauyo Homeland Park,Sauyo,Teacher St
+Quezon City,6,Sauyo Lower Gulod Day Care Center,Sauyo,Lower Gulod
+Quezon City,6,Sauyo Masarnaa Day care Center,Sauyo,201 Mabuhay Compound
+Quezon City,6,Sauyo NIA Covered Court,Sauyo,Pantabangan St
+Quezon City,6,Sauyo Sumama Day care,Sauyo,202 Mabuhay Compound
+Quezon City,6,"Sauyo, Old cabuyao Day Care Center",Sauyo,Orchids St
+Quezon City,6,Placido Del Mundo Elementary School,Talipapa,"Placido Del Mundo Elementary School, Quirino Highway"
+Quezon City,6,Talipapa Barangay Hall,Talipapa,"Brgy. Hall 3rd Floor, Quirino Highway"
+Quezon City,6,Talipapa Sahara Basketball Court,Talipapa,C. Francisco Sahara Sports Complex Basketball Court
+Quezon City,6,Talipapa Silvina Village Sports Complex,Talipapa,Silvina Village Sports Complex / Bangus St
+Quezon City,6,Talipapa Villa Sabina Park,Talipapa,Santa Sabina St
+Quezon City,6,Talipapa Volley Ball Court,Talipapa,Santa Sabina St
+Quezon City,6,St Vincent Seminary,Tandang Sora,Tandang Sora Ave
+Quezon City,6,Tandang Sora Barangay Hall,Tandang Sora,Don Jose St
+Quezon City,6,Tandang Sora SB Court,Tandang Sora,Neptune St
+Quezon City,6,Bonifacio Memorial Elementary School,Unang Sigaw,Beside Barangay hall
+Quezon City,6,Unang Sigaw Barangay Hall,Unang Sigaw,Metro Manila Rd
+Quezon City,6,Unang Sigaw Multi-purpose Covered Court,Unang Sigaw,"WeSt, Service Rd"

@@ -10,18 +10,13 @@ OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
 
 def get_daily_rainfall(latitude, longitude, past_days=2, forecast_days=3):
     """
-    Fetches daily rainfall totals (mm) for a location.
-
     Parameters:
         latitude, longitude: coordinates of the city
-        past_days: how many past days to include (default 2 — yesterday + today)
-        forecast_days: how many forecast days to include (default 3 — today, +1, +2)
+        past_days: how many past days to include (default 2 - yesterday + today)
+        forecast_days: how many forecast days to include (default 3 - today, +1, +2)
 
     Returns:
         A dict mapping date (as string 'YYYY-MM-DD') to rainfall_mm (float).
-        Example: {'2026-09-10': 3.2, '2026-09-11': 12.5, '2026-09-12': 8.0, ...}
-
-    Returns an empty dict if the request fails.
     """
 
     cache_key = (round(latitude, 3), round(longitude, 3), past_days, forecast_days)
@@ -57,11 +52,6 @@ def get_daily_rainfall(latitude, longitude, past_days=2, forecast_days=3):
     return result
 
 def get_today_rainfall(latitude, longitude):
-    """
-    Returns today's rainfall total (mm) for a location.
-    Uses the past_days window and picks today's date.
-    Returns None if the request fails.
-    """
     data = get_daily_rainfall(latitude, longitude, past_days=1, forecast_days=1)
     if not data:
         return None
@@ -72,9 +62,7 @@ def get_today_rainfall(latitude, longitude):
 
 def get_forecast_rainfall(latitude, longitude, days_ahead=1):
     """
-    Returns forecast rainfall (mm) for a specified day in the future.
     days_ahead=1 for tomorrow, 2 for +48h.
-    Returns None if the request fails.
     """
     data = get_daily_rainfall(latitude, longitude, past_days=0, forecast_days=days_ahead + 1)
     if not data:
@@ -86,7 +74,6 @@ def get_forecast_rainfall(latitude, longitude, days_ahead=1):
 
 def get_current_and_forecast(latitude, longitude):
     """
-    Fetches current conditions + 7-day forecast for a location in one call.
     Returns a dict with 'current' and 'daily' sections, or None on failure.
     Uses the same 10-min cache as get_daily_rainfall.
     """

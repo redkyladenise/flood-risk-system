@@ -1,7 +1,6 @@
 """
 One-time migration script.
 Reads cleaned_dataset.csv and inserts rows into cities and weather_records tables.
-Run once with: python migrate_data.py
 """
 import sys
 import os
@@ -35,7 +34,7 @@ with app.app_context():
         "Quezon City": (14.6760, 121.0437),
     }
 
-    city_id_map = {}  # city name -> city_id
+    city_id_map = {}  # city name to city_id
 
     for city in city_names:
         existing = City.query.filter_by(name=city).first()

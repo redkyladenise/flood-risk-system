@@ -4,138 +4,127 @@
 
 {% block content %}
 
-<!-- Alert Banner (hidden by default) -->
-<div id="alertBanner" class="alert alert-danger alert-dismissible fade show d-none" role="alert">
-    <strong>⚠ High Flood Risk Alert:</strong>
+<div id="alertBanner" class="alert alert-dismissible fade show d-none text-white border-0 py-2 pe-3 d-flex align-items-center w-100" role="alert">
+    <strong class="me-2 d-inline-flex align-items-center gap-1">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF" class="flex-shrink-0">
+            <path d="M192-216v-72h48v-240q0-87 53.5-153T432-763v-53q0-20 14-34t34-14q20 0 34 14t14 34v53q85 16 138.5 82T720-528v240h48v72H192ZM479.79-96Q450-96 429-117.15T408-168h144q0 30-21.21 51t-51 21ZM444-360h72v-84h84v-72h-84v-84h-72v84h-84v72h84v84Z"/>
+        </svg>
+        High Flood Risk Alert:
+    </strong>
     <span id="alertBannerText">A city is currently at High risk.</span>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    <div class="mt-1">
-        <small class="text-muted" id="alertBannerTimestamp"></small>
-    </div>
+    <button type="button"
+        class="btn-close btn-close-white position-static p-0 ms-auto flex-shrink-0"
+        style="transform: scale(0.7);"
+        data-bs-dismiss="alert"
+        aria-label="Close"></button>
 </div>
-
-<h1>Flood Risk Assessment</h1>
-<p class="text-muted">
-    Live risk assessment for Manila, Marikina, Pasig, and Quezon City.
+<h1>Flood Risk Level Assessment </h1>
+<p>
+    Live flood risk assessment for Manila, Marikina, Pasig, and Quezon City.
     Predictions are based on the CART model trained on historical weather and flood data.
 </p>
 
 <div class="row mt-4 g-3">
-    <!-- LEFT: Interactive Map -->
     <div class="col-lg-7 mb-4">
         <div class="card h-100">
-            <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+            <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center py-3">
                 <h5 class="mb-0">Risk Map</h5>
                 <small class="text-white-50">Hover over a city for details</small>
             </div>
             <div class="card-body p-0 position-relative">
                 <div id="homeMap" style="height: 500px; width: 100%;"></div>
-
                 <div class="position-absolute bottom-0 start-0 m-3 p-2 bg-white border rounded small" style="z-index: 1000;">
                     <strong>Legend</strong>
-                    <div><span style="display:inline-block;width:12px;height:12px;background:#198754;margin-right:4px;"></span>Low Risk</div>
-                    <div><span style="display:inline-block;width:12px;height:12px;background:#ffc107;margin-right:4px;"></span>Moderate Risk</div>
-                    <div><span style="display:inline-block;width:12px;height:12px;background:#dc3545;margin-right:4px;"></span>High Risk</div>
-                    <div class="mt-1"><span style="display:inline-block;width:12px;height:12px;background:#fd7e14;border-radius:50%;margin-right:4px;"></span>Flood Hotspot</div>
+                    <div><span style="display:inline-block;width:12px;height:12px;background:#198754;margin-right:4px;"></span>Low Risk (< 0.5 m)</div>
+                    <div><span style="display:inline-block;width:12px;height:12px;background:#ffc107;margin-right:4px;"></span>Moderate Risk (0.5-1 m)</div>
+                    <div><span style="display:inline-block;width:12px;height:12px;background:#dc3545;margin-right:4px;"></span>High Risk (> 1 m)</div>
+                    <div class="mt-1"><span style="display:inline-block;width:12px;height:12px;background:#fd7e14;border-radius:50%;margin-right:4px;"></span>Flood-prone Area</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- RIGHT: Assessment Board -->
     <div class="col-lg-5 mb-4">
         <div class="card h-100">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Today's Assessment</h5>
-            </div>
-            <div class="card-body">
-
-                <!-- City dropdown -->
-                <div class="mb-3 d-flex align-items-center gap-2">
-                    <label for="homeCitySelect" class="form-label fw-bold mb-0 text-nowrap">Select City:</label>
-                    <select id="homeCitySelect" class="form-select">
+            <div id="right-card-header" class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Assessment Board</h5>
+                <div class="d-flex align-items-center gap-2">
+                    <label for="homeCitySelect" class="form-label mb-0 text-nowrap">Select City:</label>
+                    <select id="homeCitySelect" class="form-select form-select-pill">
                         {% for city in cities %}
                         <option value="{{ city.name }}">{{ city.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
+            </div>
 
-                <!-- Loading indicator -->
+            <div class="card-body">
                 <div id="assessmentLoading" class="text-muted">
                     <em>Loading current assessment…</em>
                 </div>
 
-                <!-- Assessment results (hidden until data arrives) -->
                 <div id="assessmentContent" style="display: none;">
-
-                    <!-- Risk level big display -->
-                    <div class="text-center mb-3 p-3 border rounded" id="riskBox">
-                        <h2 id="homeRiskLevel" class="mb-0">—</h2>
-                        <h6 class="text-muted mb-1">Current Risk Level</h6>
-                        <small class="text-muted">
-                            Confidence: <span id="homeConfidence">—</span>
-                        </small>
+                    <div class="mb-3 p-3 border rounded d-flex justify-content-between align-items-center " id="riskBox">
+                        <span>
+                            <span>Predicted Risk Level:</span>
+                            <span id="homeRiskLevel" class="risk-badge fw-bold ms-2">—</span>
+                        </span>
+                        <span>
+                            <span>Confidence:</span>
+                            <span id="homeConfidence">—</span>
+                        </span>
                     </div>
 
-                    <!-- Details grid -->
                     <div class="row g-2 mb-3">
-                        <div class="col-6">
-                            <div class="p-2 border rounded">
-                                <small class="text-muted">Est. Flood Depth</small>
-                                <div id="homeDepth" class="fw-bold">—</div>
+                        <div class="col-3">
+                            <div class="p-2 border rounded text-center h-100">
+                                <div><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1b5b7e"><path d="M80-80v-80q38 0 56.5-20t77.5-20q59 0 77 20t56 20q38 0 56-20t77-20q57 0 77.5 20t56.5 20q38 0 56-20t77-20q59 0 77 20t56 20v80q-58 0-77-20t-56-20q-37 0-56 20t-77 20q-58 0-77.5-20T480-120q-38 0-56 20t-77 20q-59 0-77-20t-56-20q-37 0-56 20T80-80Zm267-180q-57 0-77-20t-56-20q-35 0-56 20t-78 20v-80q38 0 56-20t77-20q6 0 12 .5t11 1.5l-38-140-55 72-63-50 311-384 461 176-29 75-84-34 81 301q14 8 27.5 15t32.5 7v80q-57-1-77-20.5T747-300q-38 0-56 20t-77 20q-57 0-77.5-20T480-300q-38 0-56 20t-77 20Zm0-80q30 0 46.5-14t50.5-22l-37-136 155-41 56 212q31-2 49-18.5t65-19.5l-86-321-229-84-157 188 69 254q4 1 8.5 1.5t9.5.5Zm149-222Z"/></svg></div>
+                                <small class="d-block">Flood Depth</small>
+                                <div id="homeDepth" class="fw-bold small">—</div>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="p-2 border rounded">
-                                <small class="text-muted">Rainfall Today</small>
-                                <div id="homeRainfall" class="fw-bold">—</div>
+                        <div class="col-3">
+                            <div class="p-2 border rounded text-center h-100">
+                                <div><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1b5b7e"><path d="M558-84q-15 8-30.5 2.5T504-102l-60-120q-8-15-2.5-30.5T462-276q15-8 30.5-2.5T516-258l60 120q8 15 2.5 30.5T558-84Zm240 0q-15 8-30.5 2.5T744-102l-60-120q-8-15-2.5-30.5T702-276q15-8 30.5-2.5T756-258l60 120q8 15 2.5 30.5T798-84Zm-480 0q-15 8-30.5 2.5T264-102l-60-120q-8-15-2.5-30.5T222-276q15-8 30.5-2.5T276-258l60 120q8 15 2.5 30.5T318-84Zm-18-236q-91 0-155.5-64.5T80-540q0-83 55-145t136-73q32-57 87.5-89.5T480-880q90 0 156.5 57.5T717-679q69 6 116 57t47 122q0 75-52.5 127.5T700-320H300Zm0-80h400q42 0 71-29t29-71q0-42-29-71t-71-29h-60v-40q0-66-47-113t-113-47q-48 0-87.5 26T333-704l-10 24h-25q-57 2-97.5 42.5T160-540q0 58 41 99t99 41Zm180-200Z"/></svg></div>
+                                <small class="d-block">Rain</small>
+                                <div id="homeRainfall" class="fw-bold small">—</div>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="p-2 border rounded">
-                                <small class="text-muted">River Level (proxy)</small>
-                                <div id="homeRiverLevel" class="fw-bold">—</div>
+                        <div class="col-3">
+                            <div class="p-2 border rounded text-center h-100">
+                                <div><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1b5b7e"><path d="M80-146v-78q29 0 49.5-9t41.5-19.5q21-10.5 46.5-19t63-8.5q37.5 0 62 8.5t45.5 19q21 10.5 42 19.5t50 9q29 0 50-9t42-19.5q21-10.5 46-19t62.5-8.5q37.5 0 62.5 8.5t46 19q21 10.5 42 19.5t49 9v78q-38 0-63.5-9T770-174.5q-21-10.5-41-19t-49-8.5q-28 0-48.5 8.5t-41 19Q570-164 544.5-155t-64.5 9q-39 0-64.5-9t-46-19.5Q349-185 329-193.5t-48.5-8.5q-28.5 0-49 8.5t-41.5 19Q169-164 143.5-155T80-146Zm0-178v-78q29 0 49.5-9t41.5-19.5q21-10.5 46.5-19t63-8.5q37.5 0 62 8.5t45.5 19q21 10.5 42 19.5t50 9q29 0 50-9t42-19.5q21-10.5 46-19t62-8.5q38 0 63 8.5t46 19q21 10.5 42 19.5t49 9v78q-38 0-63.5-9T770-352.5q-21-10.5-41-19t-49-8.5q-29 0-49.5 8.5t-41 19Q569-342 544-333t-64 9q-39 0-64.5-9t-46-19.5Q349-363 329-371.5t-48.5-8.5q-28.5 0-49 8.5t-41.5 19Q169-342 143.5-333T80-324Zm0-178v-78q29 0 49.5-9t41.5-19.5q21-10.5 46.5-19t63-8.5q37.5 0 62 8.5t45.5 19q21 10.5 42 19.5t50 9q29 0 50-9t42-19.5q21-10.5 46-19t62-8.5q38 0 63 8.5t46 19q21 10.5 42 19.5t49 9v78q-38 0-63.5-9T770-530.5q-21-10.5-41-19t-49-8.5q-28 0-48.5 8.5t-41 19Q570-520 544.5-511t-64.5 9q-39 0-64.5-9t-46-19.5Q349-541 329-549.5t-48.5-8.5q-28.5 0-49 8.5t-41.5 19Q169-520 143.5-511T80-502Zm0-178v-78q29 0 49.5-9t41.5-19.5q21-10.5 46.5-19t63-8.5q37.5 0 62 8.5t45.5 19q21 10.5 42 19.5t50 9q29 0 50-9t42-19.5q21-10.5 46-19t62-8.5q38 0 63 8.5t46 19q21 10.5 42 19.5t49 9v78q-38 0-63.5-9T770-708.5q-21-10.5-41-19t-49-8.5q-28 0-48.5 8.5t-41 19Q570-698 544.5-689t-64.5 9q-39 0-64.5-9t-46-19.5Q349-719 329-727.5t-48.5-8.5q-28.5 0-49 8.5t-41.5 19Q169-698 143.5-689T80-680Z"/></svg></div>
+                                <small class="d-block">River Level (proxy)</small>
+                                <div id="homeRiverLevel" class="fw-bold small">—</div>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="p-2 border rounded">
-                                <small class="text-muted">Soil Moisture (proxy)</small>
-                                <div id="homeSoilMoisture" class="fw-bold">—</div>
+                        <div class="col-3">
+                            <div class="p-2 border rounded text-center h-100">
+                                <div><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1b5b7e"><path d="M491-200q12-1 20.5-9.5T520-230q0-14-9-22.5t-23-7.5q-41 3-87-22.5T343-375q-2-11-10.5-18t-19.5-7q-14 0-23 10.5t-6 24.5q17 91 80 130t127 35Zm-239.5 26Q160-268 160-408q0-100 79.5-217.5T480-880q161 137 240.5 254.5T800-408q0 140-91.5 234T480-80q-137 0-228.5-94ZM652-230.5Q720-301 720-408q0-73-60.5-165T480-774Q361-665 300.5-573T240-408q0 107 68 177.5T480-160q104 0 172-70.5ZM480-480Z"/></svg></div>
+                                <small class="d-block">Soil Moisture (proxy)</small>
+                                <div id="homeSoilMoisture" class="fw-bold small">—</div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Advisory text -->
+                    <div class="border-top pt-3 mb-3">
+                        <h6 class="mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1b5b7e" class="align-middle"><path d="M291.5-411.5Q280-423 280-440t11.5-28.5Q303-480 320-480t28.5 11.5Q360-457 360-440t-11.5 28.5Q337-400 320-400t-28.5-11.5Zm160 0Q440-423 440-440t11.5-28.5Q463-480 480-480t28.5 11.5Q520-457 520-440t-11.5 28.5Q497-400 480-400t-28.5-11.5Zm160 0Q600-423 600-440t11.5-28.5Q623-480 640-480t28.5 11.5Q680-457 680-440t-11.5 28.5Q657-400 640-400t-28.5-11.5ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z"/></svg>
+                            2-Day Outlook
+                            <span>• 24h Trend: </span>
+                            <span id="forecastTrend" class="badge bg-secondary ms-1 align-middle">—</span>
+                        </h6>
+
+                        <div id="forecastLoading" class="text-muted small">
+                            <em>Loading forecast…</em>
+                        </div>
+
+                        <div id="forecastContent" style="display: none;">
+                            <div class="row g-2" id="forecastCards"></div>
+                        </div>
+                    </div>
+
                     <div class="alert alert-light border mb-0">
-                        <small><strong>Advisory:</strong> <span id="homeAdvisory">—</span></small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Forecast Summary Row -->
-<div class="row mt-2">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header bg-info text-white">
-                <h5 class="mb-0">Forecast Summary</h5>
-            </div>
-            <div class="card-body">
-
-                <div id="forecastLoading" class="text-muted">
-                    <em>Loading forecast…</em>
-                </div>
-
-                <div id="forecastContent" style="display: none;">
-                    <div class="mb-3">
-                        <strong>Trend:</strong>
-                        <span id="forecastTrend" class="badge bg-secondary">—</span>
-                    </div>
-
-                    <div class="row g-3" id="forecastCards">
-                        <!-- Populated by JS -->
+                        <small><svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#212529" class="align-middle mb-1"><path d="M440-280h80v-240h-80v240Zm68.5-331.5Q520-623 520-640t-11.5-28.5Q497-680 480-680t-28.5 11.5Q440-657 440-640t11.5 28.5Q463-600 480-600t28.5-11.5ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg><strong> Advisory:</strong> <span id="homeAdvisory">—</span></small>
                     </div>
                 </div>
             </div>
@@ -146,14 +135,12 @@
 {% endblock %}
 
 {% block scripts %}
-
 <link rel="stylesheet" href="{{ url_for('static', filename='vendor/leaflet/leaflet.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}" />
+
 <script src="{{ url_for('static', filename='vendor/leaflet/leaflet.js') }}"></script>
-
-<script src="{{ url_for('static', filename='js/home.js') }}"></script>
-
 <script>
     window.APP_CITIES = {{ cities | tojson }};
 </script>
-
+<script src="{{ url_for('static', filename='js/home.js') }}"></script>
 {% endblock %}
