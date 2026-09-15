@@ -1,0 +1,31 @@
+{
+    "linear_features": [
+        "Rainfall_mm",
+        "WaterLevel_m",
+        "SoilMoisture_pct",
+        "Location_Marikina",
+        "Location_Pasig",
+        "Location_Quezon City"
+    ],
+    "cart_features": [
+        "Rainfall_mm",
+        "WaterLevel_m",
+        "SoilMoisture_pct",
+        "Elevation_m",
+        "Location_Manila",
+        "Location_Marikina",
+        "Location_Pasig",
+        "Location_Quezon City"
+    ],
+    "target_regression": "FloodDepth_m",
+    "target_classification": "RiskLevel",
+    "classification_classes": [
+        "High",
+        "Low",
+        "Moderate"
+    ],
+    "scaling_required_for_linear": true,
+    "scaling_required_for_cart": false,
+    "dropped_reference_dummy": "Location_Manila",
+    "dropped_collinear_feature": "Elevation_m"
+}
