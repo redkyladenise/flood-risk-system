@@ -1,0 +1,284 @@
+.nine-one-one-badge {
+    background-color: #dc3545;
+    color: #ffffff;
+    border-radius: 12px;
+    padding: 0.6rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+.nine-one-one-number {
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.nine-one-one-label {
+    font-size: 0.75rem;
+    opacity: 0.9;
+}
+
+.national-card {
+    border: 1px solid #1b5b7e;
+    border-radius: 12px;
+    padding: 1.25rem 1rem;
+    text-align: center;
+    height: 100%;
+    /* background-color: #4F9CF9; */
+}
+
+.national-card:hover {
+    border-color: #1b5b7e;
+    background: #f8fafc;
+}
+
+.national-agency {
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.national-service {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: #6c757d;
+    margin-bottom: 5px;
+    min-height: 2em;
+}
+
+.national-number-primary {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1b5b7e;
+    line-height: 1.2;
+    word-break: break-word;
+}
+
+.national-number-medium {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1b5b7e;
+    line-height: 1.4;
+    word-break: break-word;
+    margin-top: 4px;
+}
+
+.national-number-secondary {
+    font-size: 1rem;
+    font-weight: 700;
+
+    color: #1b5b7e;
+    line-height: 1.4;
+    word-break: break-word;
+    margin-top: 4px;
+}
+
+#emergencyCityDropdownMenu .dropdown-item:hover,
+#emergencyCityDropdownMenu .dropdown-item:focus {
+    background-color: #767676;
+    color: #FFFFFF;
+}
+
+
+.agency-title {
+    font-weight: 700;
+    font-size: 1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.hotline-card {
+    background-color: #1b5b7e;
+    color: #FFFFFF;
+
+    border: 1px solid #1b5b7e;
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.hotline-card:hover {
+    border-color: #1b5b7e;
+    background: #f8fafc;
+}
+
+.hotline-agency-tag {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #f8fafc;
+
+}
+
+.hotline-type {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #f8fafc;
+
+}
+
+.hotline-number {
+    font-size: 1.2rem;
+    font-weight: 700;
+    word-break: break-word;
+    margin-left: 22px;
+    color: #f8fafc;
+}
+
+.hotline-card:hover .hotline-type,
+.hotline-card:hover .hotline-number,
+.hotline-card:hover .hotline-agency-tag {
+    color: #1b5b7e !important;
+}
+
+.single-card-wrap {
+    display: flex;
+    justify-content: center;
+}
+
+.single-card-wrap .hotline-card {
+    width: 100%;
+}
+
+.single-card-wrap .hotline-type {
+    margin-left: 0;
+    justify-content: center;
+}
+
+.single-card-wrap .hotline-number {
+    margin-left: 0;
+    text-align: center;
+}
+
+.evac-card {
+    border: 1px solid #c2c5c8;
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.evac-card:hover {
+    border-color: #1b5b7e;
+    background: #f8fafc;
+}
+
+.evac-alt {
+    background-color: #f2f6fa;
+}
+
+.evac-left {
+    flex: 1;
+}
+
+.evac-name {
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 2px;
+}
+
+.evac-address {
+    font-size: 0.95rem;
+}
+
+.evac-badges {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.4rem;
+    flex-shrink: 0;
+}
+
+.badge-district {
+    background-color: #cfe2ff;
+    color: #084298;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+}
+
+.evac-search-box {
+    border-radius: 20px;
+    border: 1px solid #c2c5c8;
+    padding: 0.45rem 1rem;
+    font-size: 0.9rem;
+    background-color: #ffffff;
+}
+
+.input-group .input-group-text {
+    border: 1px solid #c2c5c8;
+    border-radius: 20px 0 0 20px !important;
+}
+
+.input-group .evac-search-box {
+    border: 1px solid #c2c5c8;
+    border-radius: 0 20px 20px 0 !important;
+}
+
+.input-group:focus-within .input-group-text,
+.input-group:focus-within .evac-search-box,
+.evac-search-box:focus {
+    border-color: #1b5b7e !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+.district-pill {
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 1px solid #cbd5e1;
+    background: transparent;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.district-pill:hover,
+.district-pill.active {
+    background-color: #1b5b7e;
+    border-color: #1b5b7e;
+    color: #ffffff;
+}
+
+#evacList .evac-card {
+    height: 100%;
+    margin-bottom: 0;
+}
+
+.evac-pagination .page-link {
+    color: #1b5b7e;
+    border: 1px solid #dee2e6;
+    border-radius: 6px !important;
+    margin: 0 2px;
+    min-width: 32px;
+    text-align: center;
+    font-size: 0.85rem;
+}
+
+.evac-pagination .page-item.active .page-link {
+    background-color: #1b5b7e;
+    border-color: #1b5b7e;
+    color: #ffffff;
+}
+
+.evac-pagination .page-item.disabled .page-link {
+    color: #6c757d;
+    background-color: transparent;
+    border-color: transparent;
+}

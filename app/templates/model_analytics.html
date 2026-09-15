@@ -1,0 +1,383 @@
+{% extends "base.html" %}
+
+{% block title %}Model Analytics | Flood Risk Assessment System{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/model_analytics.css') }}?v=1.1">
+
+<div class="container py-4">
+    <div class="mb-4">
+        <h1 class="fw-bold">Model Analytics</h1>
+        <p class="text-muted">
+            Technical evaluation and architectural breakdowns of the predictive CART models used for flood risk assessment.
+        </p>
+    </div>
+
+    <div class="alert summary-box border-0 rounded-3 shadow-sm mb-5 p-4 d-flex align-items-start gap-3">
+        <svg xmlns="http://www.w3.org/2000/svg" 
+            style="width: 36px; height: 36px; min-width: 36px;" 
+            viewBox="0 -960 960 960" 
+            fill="#ffffff" 
+            class="flex-shrink-0 mt-1">
+            <path d="M400-240q-33 0-56.5-23.5T320-320v-50q-57-39-88.5-100T200-600q0-117 81.5-198.5T480-880q117 0 198.5 81.5T760-600q0 69-31.5 129.5T640-370v50q0 33-23.5 56.5T560-240H400Zm0-80h160v-92l34-24q41-28 63.5-71.5T680-600q0-83-58.5-141.5T480-800q-83 0-141.5 58.5T280-600q0 49 22.5 92.5T366-436l34 24v92Zm0 240q-17 0-28.5-11.5T360-120v-40h240v40q0 17-11.5 28.5T560-80H400Zm80-520Z"/>
+        </svg>
+
+        <div>
+            <h5 class="fw-bold mb-2">Model Evaluation Summary</h5>
+            <p class="mb-2">
+                Both models perform strongly on the historical dataset. Rather than following a standard normal distribution, weather and flood data is naturally <strong>zero-inflated and right-skewed</strong>: dry days dominate the record (98.5% Low risk), while dangerous floods (1.5% Moderate and High combined) represent rare, extreme events.
+            </p>
+            <p class="mb-3">
+                The high evaluation scores, including a 0.93 Quadratic Cohen's Kappa score, occur because flooding follows clear physical rules that align naturally with the CART algorithm. Heavy rain volume and rising river water levels create distinct cutoffs that the decision tree separates easily, without target data leakage and with minimum sample rules (min_samples_leaf=20) to prevent overfitting. <strong>Macro-averaged recall (97.30%)</strong> is prioritized as our primary evaluation metric to prove the model actively and reliably detects life-threatening flood events rather than defaulting to majority-class predictions.
+            </p>
+            <p class="mb-0 small text-white-50">
+                See the 
+                <a href="{{ url_for('about') if 'about' in url_for.__globals__ else '/about' }}" class="about-btn-link">
+                    About page
+                </a> 
+                for full data sources and operational limitation notes.
+            </p>
+        </div>
+    </div>
+
+    <!-- Regression  -->
+    <section class="mb-5">
+        <div class="d-flex align-items-center mb-2">
+            <h2 id="reg-h2" class="mb-0 fw-bold text-primary">Regression - Flood Depth Prediction</h2>
+            <hr class="flex-grow-1 ms-3 my-0">
+        </div>
+        <p class="text-muted mb-3 d-flex align-items-center">
+            <strong>Model:</strong>&nbsp;{{ metrics.regression.model }}
+            <svg class="info-icon ms-1" data-bs-toggle="tooltip" data-bs-placement="right" title="CART (Classification and Regression Trees) builds yes/no rules to predict flood depth in meters." xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="#6c757d">
+                <path d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+            </svg>
+        </p>
+
+        <div class="row g-3 mb-4">
+            <div class="col-sm-6 col-lg-3">
+                <div class="metric-card">
+                    <div class="metric-label">MAE</div>
+                    <div class="metric-value">{{ metrics.regression.mae }} <span class="unit">m</span></div>
+                    <div class="progress-meter"><div class="meter-bar bg-primary" style="width: 95%;"></div></div>
+                    <div class="metric-fullname">Mean Absolute Error</div>
+                    <div class="metric-desc">Average error between predicted and actual flood depths.</div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="metric-card">
+                    <div class="metric-label">RMSE</div>
+                    <div class="metric-value">{{ metrics.regression.rmse }} <span class="unit">m</span></div>
+                    <div class="progress-meter"><div class="meter-bar bg-primary" style="width: 88%;"></div></div>
+                    <div class="metric-fullname">Root Mean Squared Error</div>
+                    <div class="metric-desc">Average error, penalizing rare but dangerous major misses.</div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="metric-card">
+                    <div class="metric-label">R² Score</div>
+                    <div class="metric-value">{{ metrics.regression.r2 }}</div>
+                    <div class="progress-meter"><div class="meter-bar bg-primary" style="width: 98%;"></div></div>
+                    <div class="metric-fullname">Coefficient of Determination</div>
+                    <div class="metric-desc">Rate of actual flood depth changes explained by the model instead of random fluctuation.</div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="metric-card">
+                    <div class="metric-label d-inline-flex align-items-center gap-1">
+                        <span>MAPE (depth &gt; 0)</span>
+                        <svg class="info-icon" 
+                            data-bs-toggle="tooltip" 
+                            data-bs-placement="top" 
+                            title="Measured only on rainy or flooded days. Dry days with 0 m flood depth cause a division-by-zero error in standard percentage calculations."
+                            xmlns="http://www.w3.org/2000/svg" 
+                            height="16px" 
+                            viewBox="0 -960 960 960" 
+                            width="16px" 
+                            fill="#64748b">
+                            <path d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+                        </svg>
+                    </div>
+                    <div class="metric-value">{{ metrics.regression.mape_nonzero }}%</div>
+                    <div class="progress-meter"><div class="meter-bar bg-primary" style="width: 86%;"></div></div>
+                    <div class="metric-fullname">Mean Abs. Percentage Error</div>
+                    <div class="metric-desc">Typical percentage error, checked only on actual flood days.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="viz-card" data-bs-toggle="modal" data-bs-target="#imageModal" data-theme="primary" data-img-src="{{ url_for('static', filename='images/cart_regressor_feature_importance.png') }}"  data-img-title="Regression Feature Importance">
+                    <div class="viz-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <div class="d-inline-flex align-items-center gap-1">
+                            <span>Feature Importance</span>
+                            <svg class="info-icon info-icon-light" data-bs-toggle="tooltip" data-bs-placement="top" title="Measures how much each weather condition reduces variance (the spread of prediction errors) across all decision splits." xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#ffffff">
+                                <path d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+                            </svg>
+                        </div>
+                        <small class="viz-badge">Click to zoom in</small>
+                    </div>
+                    <div class="viz-img-box">
+                        <img src="{{ url_for('static', filename='images/cart_regressor_feature_importance.png') }}" alt="Regressor feature importance">
+                    </div>
+                    <div class="viz-summary">
+                        <strong>Summary:</strong> Rainfall is the main driver, followed by river water level. Flood depth depends almost entirely on rain volume and river water levels, while static factors like elevation contribute neglible predictive importance.
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="viz-card" data-bs-toggle="modal" data-bs-target="#imageModal" data-img-src="{{ url_for('static', filename='images/cart_regressor_tree_diagram.png') }}" data-img-title="Regression Tree Architecture">
+                    <div class="viz-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <div class="d-inline-flex align-items-center gap-1">
+                            <span>Decision Tree Structure (Regressor)</span>
+                            <svg class="info-icon info-icon-light" data-bs-toggle="tooltip" data-bs-placement="top" title="A flowchart of yes/no decision rules trained with CART. It uses Mean Squared Error (MSE) as the splitting rule to minimize errors as branches go deeper." xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#ffffff">
+                                <path d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+                            </svg>
+                        </div>
+                        <small class="viz-badge">Click to enlarge</small>
+                    </div>
+                    <div class="viz-img-box">
+                        <img src="{{ url_for('static', filename='images/cart_regressor_tree_diagram.png') }}" alt="CART regressor tree">
+                    </div>
+                    <div class="viz-summary">
+                        <strong>Summary:</strong> Predicting continuous flood depth (in meters), the tree branches downward using threshold values. The top decision split (root) separates dry days from flood days before using rainfall and river water level values to estimate flood depths.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Classification -->
+    <section class="mb-5">
+        <div class="d-flex align-items-center mb-2">
+            <h3 class="mb-0 text-success fw-bold">Classification - Risk Level Prediction</h3>
+            <hr class="flex-grow-1 ms-3 my-0">
+        </div>
+        <p class="text-muted mb-3 d-flex align-items-center">
+            <strong>Model:</strong>&nbsp;{{ metrics.classification.model }}
+            <svg class="info-icon ms-1" data-bs-toggle="tooltip" data-bs-placement="right" title="CART model mapping features (inputs) into Low, Moderate, or High flood risk categories." xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="#6c757d">
+                <path d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+            </svg>
+        </p>
+
+        <div class="row g-3 mb-4">
+            <div class="col-sm-6 col-md-4 col-lg-2">
+                <div class="metric-card">
+                    <div class="metric-label">Accuracy</div>
+                    <div class="metric-value">{{ metrics.classification.accuracy }}</div>
+                    <div class="progress-meter"><div class="meter-bar bg-success" style="width: 99%;"></div></div>
+                    <div class="metric-fullname">Overall Accuracy</div>
+                    <div class="metric-desc">Overall success rate of risk level predictions across all recorded days.</div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4 col-lg-2">
+                <div class="metric-card border-success shadow-sm">
+                    <div class="metric-label text-success d-flex justify-content-between">
+                        <span>Recall (M)</span>
+                        <span class="badge bg-success">Priority</span>
+                    </div>
+                    <div class="metric-value text-success">{{ metrics.classification.recall_macro }}</div>
+                    <div class="progress-meter"><div class="meter-bar bg-success" style="width: 87%;"></div></div>
+                    <div class="metric-fullname d-inline-flex align-items-center gap-1">
+                        <span>Macro-Avg Recall</span>
+                        <svg class="info-icon" 
+                            data-bs-toggle="tooltip" 
+                            data-bs-placement="top" 
+                            title="Evaluated as macro to allow rare high-risk floods to count equally with dry days (no flood)."
+                            xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 -960 960 960" width="15px" fill="#64748b">
+                            <path d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+                        </svg>
+                    </div>
+                    <div class="metric-desc">Ability to identify real flood events to prevent dangerous missed alarms.</div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4 col-lg-2">
+                <div class="metric-card">
+                    <div class="metric-label">Precision (M)</div>
+                    <div class="metric-value">{{ metrics.classification.precision_macro }}</div>
+                    <div class="progress-meter"><div class="meter-bar bg-success" style="width: 85%;"></div></div>
+                    <div class="metric-fullname d-inline-flex align-items-center gap-1">
+                        <span>Macro Precision</span>
+                        <svg class="info-icon" 
+                            data-bs-toggle="tooltip" 
+                            data-bs-placement="top" 
+                            title="Averaged equally across all risk levels regardless of sample size."
+                            xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 -960 960 960" width="15px" fill="#64748b">
+                            <path d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+                        </svg>
+                    </div>
+                    <div class="metric-desc">Reliability of flood alerts to prevent unnecessary false alarms.</div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4 col-lg-2">
+                <div class="metric-card">
+                    <div class="metric-label">F1-Score (M)</div>
+                    <div class="metric-value">{{ metrics.classification.f1_macro }}</div>
+                    <div class="progress-meter"><div class="meter-bar bg-success" style="width: 86%;"></div></div>
+                    <div class="metric-fullname d-inline-flex align-items-center gap-1">
+                        <span>Macro F1</span>
+                        <svg class="info-icon" 
+                            data-bs-toggle="tooltip" 
+                            data-bs-placement="top" 
+                            title="Giving equal weight to every risk level to balance precision and recall."
+                            xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 -960 960 960" width="15px" fill="#64748b">
+                            <path d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+                        </svg>
+                    </div>
+                    <div class="metric-desc">Balanced score between idenfifying floods and avoiding false alarms.</div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4 col-lg-2">
+                <div class="metric-card">
+                    <div class="metric-label">F1-Score (W)</div>
+                    <div class="metric-value">{{ metrics.classification.f1_weighted }}</div>
+                    <div class="progress-meter"><div class="meter-bar bg-success" style="width: 99%;"></div></div>
+                    <div class="metric-fullname d-inline-flex align-items-center gap-1">
+                        <span>Weighted F1</span>
+                        <svg class="info-icon" 
+                            data-bs-toggle="tooltip" 
+                            data-bs-placement="top" 
+                            title="Weighted by how common each level is, accounting for the huge number of dry days."
+                            xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 -960 960 960" width="15px" fill="#64748b">
+                            <path d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+                        </svg>
+                    </div>
+                    <div class="metric-desc">Overall balance adjusted for the actual frequency of each flood risk level.</div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4 col-lg-2">
+                <div class="metric-card">
+                    <div class="metric-label">Kappa (Q)</div>
+                    <div class="metric-value">{{ metrics.classification.kappa_quadratic }}</div>
+                    <div class="progress-meter"><div class="meter-bar bg-success" style="width: 99%;"></div></div>
+                    <div class="metric-fullname d-inline-flex align-items-center gap-1">
+                        <span>Cohen's Kappa (Quadratic)</span>
+                        <svg class="info-icon" 
+                            data-bs-toggle="tooltip" 
+                            data-bs-placement="top" 
+                            title="Uses quadratic weighting because flood tiers are ordered (Low < Mod < High). Extreme misses across two risk tiers (Low vs. High) receive a much heavier penalty than close misses (Low vs. Moderate)."
+                            xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 -960 960 960" width="15px" fill="#64748b">
+                            <path d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+                        </svg>
+                    </div>
+                    <div class="metric-desc">Prediction accuracy beyond pure luck (inter-rater agreement).</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="viz-card" data-bs-toggle="modal" data-bs-target="#imageModal" data-theme="success" data-img-src="{{ url_for('static', filename='images/cart_classifier_confusion_matrix.png') }}" data-img-title="Confusion Matrix">
+                    <div class="viz-header bg-success text-white d-flex justify-content-between align-items-center">
+                        <div class="d-inline-flex align-items-center gap-1">
+                            <span>Confusion Matrix</span>
+                            <svg class="info-icon info-icon-light" data-bs-toggle="tooltip" data-bs-placement="top" title="A comparison table checking actual flood risk levels against predicted levels to show correct counts and highlight specific classification errors." xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#ffffff">
+                                <path d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+                            </svg>
+                        </div>
+                        <small class="viz-badge">Click to enlarge</small>
+                    </div>
+                    <div class="viz-img-box">
+                        <img src="{{ url_for('static', filename='images/cart_classifier_confusion_matrix.png') }}" alt="Classifier confusion matrix">
+                    </div>
+                    <div class="viz-summary">
+                        <strong>Summary:</strong> Accurately identifies 1,434 low-risk days while reliably identifying moderate and high risk days. Missed floods are near zero, ensuring dangerous events are rarely marked as safe.
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="viz-card" data-bs-toggle="modal" data-bs-target="#imageModal" data-theme="success" data-img-src="{{ url_for('static', filename='images/cart_classifier_feature_importance.png') }}" data-img-title="Classification Feature Importance">
+                    <div class="viz-header bg-success text-white d-flex justify-content-between align-items-center">
+                        <div class="d-inline-flex align-items-center gap-1">
+                            <span>Feature Importance (Classifier)</span>
+                            <svg class="info-icon info-icon-light" data-bs-toggle="tooltip" data-bs-placement="top" title="Measures how well each feature (predictor) helps sort the data into single risk categories using Gini impurity." xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#ffffff">
+                                <path d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+                            </svg>
+                        </div>
+                        <small class="viz-badge">Click to enlarge</small>
+                    </div>
+                    <div class="viz-img-box">
+                        <img src="{{ url_for('static', filename='images/cart_classifier_feature_importance.png') }}" alt="Classifier feature importance">
+                    </div>
+                    <div class="viz-summary">
+                        <strong>Summary:</strong> Rainfall and river water levels drive almost all the model's predictions. City location, such as Pasig, adds very little impact. Risk level (Low, Moderate, High) increases mainly because of heavy rainfall and river water levels rather than the city itself.
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="viz-card" data-bs-toggle="modal" data-bs-target="#imageModal" data-theme="success" data-img-src="{{ url_for('static', filename='images/cart_classifier_tree_diagram.png') }}" data-img-title="Classification Tree Structure">
+                    <div class="viz-header bg-success text-white d-flex justify-content-between align-items-center">
+                        <div class="d-inline-flex align-items-center gap-1">
+                            <span>Decision Tree Structure (Classifier)</span>
+                            <svg class="info-icon info-icon-light" data-bs-toggle="tooltip" data-bs-placement="top" title="A flowchart of yes/no decision rules trained with CART. It uses Gini impurity as the splitting rule to find the cleanest cutoffs when sorting into risk tiers." xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#ffffff">
+                                <path d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+                            </svg>
+                        </div>
+                        <small class="viz-badge">Click to enlarge</small>
+                    </div>
+                    <div class="viz-img-box">
+                        <img src="{{ url_for('static', filename='images/cart_classifier_tree_diagram.png') }}" alt="CART classifier tree">
+                    </div>
+                    <div class="viz-summary">
+                        <strong>Summary:</strong> The tree checks rainfall at the top split (root) to quickly separate normal weather from flood risks. It then checks river water levels to assign final Low, Moderate, or High risk ratings based on MGB guidelines.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg overflow-hidden">
+            <div class="modal-header py-2 px-3 text-white transition-all" id="modalHeader">
+                <h6 class="modal-title fw-bold text-white mb-0" id="modalTitle">Visualization Preview</h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-3 text-center bg-light">
+                <img src="" id="modalTargetImg" class="img-fluid rounded border shadow-sm" alt="Expanded diagram preview">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        [...tooltipTriggerList].forEach(el => {
+            new bootstrap.Tooltip(el, {
+                container: 'body'
+            });
+        });
+
+        const imageModal = document.getElementById('imageModal');
+        if (imageModal) {
+            const modalHeader = document.getElementById('modalHeader');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalImg = document.getElementById('modalTargetImg');
+
+            imageModal.addEventListener('show.bs.modal', function (event) {
+                const card = event.relatedTarget;
+                if (!card) return; 
+                
+                const imgSrc = card.getAttribute('data-img-src') || '';
+                const imgTitle = card.getAttribute('data-img-title') || 'Visualization Preview';
+                const theme = card.getAttribute('data-theme') || 'primary';
+
+                if (modalImg) modalImg.src = imgSrc;
+                if (modalTitle) modalTitle.textContent = imgTitle;
+
+                if (modalHeader) {
+                    modalHeader.classList.remove('bg-primary', 'bg-success');
+                    modalHeader.classList.add(`bg-${theme}`);
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}
