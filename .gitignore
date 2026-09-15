@@ -14,11 +14,11 @@ data/raw/*
 !data/raw/.gitkeep
 data/processed/*
 !data/processed/.gitkeep
-models/*
-!models/.gitkeep
+# models/*
+# !models/.gitkeep
 
 # VS Code directory
 .vscode/
 # Database
-instance/
-*.db
+# instance/
+# *.db
