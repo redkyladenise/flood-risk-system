@@ -136,7 +136,7 @@
 
 .keep-in-mind {
     max-width: 1000px;
-    margin: 0 auto;
+    margin: 4rem auto;
     padding: 3rem 1rem;
     text-align: center;
 }
@@ -183,12 +183,82 @@
     background: #f8fafc;
 }
 
-.keep-in-mind hr {
-    margin: 0;
-    border-color: #dee2e6;
+.privacy-section {
+    background-color: #092736;
+    color: #ffffff;
+    padding: 5rem 0;
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+
+    margin-bottom: -1.5rem !important;
+}
+
+.privacy-section > h2,
+.privacy-section > p,
+.privacy-section > .privacy-list {
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.privacy-section h2 {
+    font-weight: 700;
+    font-size: 2rem;
+    color: #ffffff;
+    margin-bottom: 1rem;
+}
+
+.privacy-section > p {
+    color: #ced4da;
+    line-height: 1.75;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.privacy-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.privacy-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #ced4da;
+    line-height: 1.5;
+    font-size: 0.95rem;
+    padding: 1rem 1.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 12px;
+    transition: all 0.2s ease-in-out;
+}
+
+.privacy-item:hover {
+    border-color: #f8fafc;
+    background: #103d54;
+}
+
+.privacy-item svg {
+    color: #ffffff;
+    flex-shrink: 0;
+}
+
+.privacy-item strong {
+    display: block;
+    color: #ffffff;
+    margin-bottom: 4px;
 }
 
 @media (max-width: 768px) {
     .about-hero h1 { font-size: 2rem; }
-    .about-dark { padding: 2.5rem 0; }
+    .about-dark .privacy-section { padding: 2.5rem 0; }
+
 }

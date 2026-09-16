@@ -50,7 +50,6 @@ with app.app_context():
                 elevation_m=elev,
                 latitude=lat,
                 longitude=lon,
-                geojson_boundary=None,  # ====== will be filled later for choropleth map =====
             )
             db.session.add(new_city)
             db.session.flush()

@@ -11,7 +11,6 @@ class City(db.Model):
     elevation_m = db.Column(db.Float)
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
-    geojson_boundary = db.Column(db.Text)  # reference path for choropleth map
 
 
 class WeatherRecord(db.Model):
